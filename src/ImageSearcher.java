@@ -1,8 +1,10 @@
 import java.io.*;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
@@ -36,9 +38,38 @@ public class ImageSearcher {
 		}
 	}
 	
+	public ArrayList<String> splitQuery(String queryString){
+		ArrayList<String> terms = new ArrayList<String>(0) ;
+		StringReader reader = new StringReader(queryString) ;
+		TokenStream ts = analyzer.tokenStream(" ", reader) ;
+		CharTermAttribute termAttribute  = ts.getAttribute(CharTermAttribute.class) ;
+		try {
+			while(ts.incrementToken()){
+				terms.add(termAttribute.toString()) ;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Splitword error");
+			e.printStackTrace();
+		}
+		return terms ;
+	}
+	
+	public ArrayList<Term> splitTerms(ArrayList<String> queryWords, String field) {
+		ArrayList<Term> termlist = new ArrayList<Term>(0) ;
+		for (int i = 0; i < queryWords.size(); i++) {
+			termlist.add(new Term(field, queryWords.get(i))) ;
+		}
+		return termlist ;
+	}
+	
 	public TopDocs searchQuery(String queryString,String field,int maxnum){
 		try {
 			Term term=new Term(field,queryString);
+			// get split word query
+			ArrayList<String> querywords = splitQuery(queryString) ;
+			ArrayList<Term> termlist = splitTerms(querywords, field) ; // termlist word use later
+			
 			Query query=new SimpleQuery(term,avgLength);
 			query.setBoost(1.0f);
 			//Weight w=searcher.createNormalizedWeight(query);
@@ -81,7 +112,7 @@ public class ImageSearcher {
 		search.loadGlobals("forIndex/global.txt");
 		System.out.println("avg length = "+search.getAvg());
 		
-		TopDocs results=search.searchQuery("ËÎ×æµÂ", "abstract", 100);
+		TopDocs results=search.searchQuery("ï¿½ï¿½ï¿½ï¿½ï¿½", "abstract", 100);
 		ScoreDoc[] hits = results.scoreDocs;
 		for (int i = 0; i < hits.length; i++) { // output raw format
 			Document doc = search.getDoc(hits[i].doc);
