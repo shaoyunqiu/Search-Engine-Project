@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/pdfbox-1.8.13.jar"/>
 	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/fontbox-1.8.13.jar"/>
 	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/jsoup-1.10.2.jar"/>
+	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/commons-logging-1.2/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

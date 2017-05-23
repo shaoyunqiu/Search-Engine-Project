@@ -51,6 +51,8 @@ public class ImageIndexer {
 	 */
 	public void indexSpecialFile(String filename){
 		try{
+			//String pdfContent = pdfExtractor.getpdfText("text/test.pdf") ;
+			//System.out.println(pdfContent);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();   
 			DocumentBuilder db = dbf.newDocumentBuilder();    
 			org.w3c.dom.Document doc = db.parse(new File(filename));

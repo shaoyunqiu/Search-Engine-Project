@@ -8,19 +8,21 @@ import org.omg.CORBA.INTERNAL;
 
 
 public class pdfExtractor {
-	static public String getpdfText(String filename){
+	public static String getpdfText(String filename){
 		String content = "" ;
 		try {
-			FileInputStream fis = new FileInputStream(filename) ;
+			FileInputStream fis = new FileInputStream(new File(filename)) ;
 			PDFParser p = new PDFParser(fis) ;
 			p.parse();
 			PDFTextStripper ts = new PDFTextStripper() ;
-			content = ts.getText(p.getDocument()) ;
+			PDDocument document = p.getPDDocument() ;
+			content = ts.getText(document) ;
 			fis.close();
+			document.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("pdfExtractor exception : " + filename);
 		}		
 		return content ;
-	}
+	}	
 }
