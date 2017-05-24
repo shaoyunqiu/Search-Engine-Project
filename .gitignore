@@ -1,0 +1,12 @@
+/forIndex/
+/input/
+/text/
+/.settings/
+/src/META-INF/
+/WebRoot/META-INF/
+/WebRoot/WEB-INF/
+.classpath
+.DS_Store
+.mymetadata
+.project
+.tern-project
