@@ -24,5 +24,11 @@ public class pdfExtractor {
 			System.out.println("pdfExtractor exception : " + filename);
 		}		
 		return content ;
-	}	
+	}
+	
+	/*public static void main(String[] argv) {
+		String filename = "../data/pdf/0.pdf" ;
+		String text = pdfExtractor.getpdfText(filename) ;
+		System.out.println(text);
+	}*/
 }

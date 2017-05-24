@@ -10,19 +10,19 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 
-public class JsonDealer {
+public class MyJsonDealer {
 	public String filepath ;
 	public String data ;
 	public String title ;
 	public String url;
 	public int id ;
 	
-	public JsonDealer(String path) {
+	public MyJsonDealer(String path) {
 		// TODO Auto-generated constructor stub
 		filepath = path ;
 	}
 	
-	public void ReadFile(){
+	public boolean ReadFile(){
 		BufferedReader br = null ;
 		data = "" ;
 		try {
@@ -34,9 +34,11 @@ public class JsonDealer {
 				data += tmp ;
 			}
 			br.close();
+			return true ;
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("read json data fail: " + filepath);
+			return false ;
 		}finally{
 			if(br != null){
 				try {
