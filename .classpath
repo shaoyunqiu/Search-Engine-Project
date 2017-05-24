@@ -22,14 +22,14 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/pdfbox-1.8.13.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/fontbox-1.8.13.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/jsoup-1.10.2.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/commons-logging-1.2/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/json-lib-jar/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/json-lib-jar/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/json-lib-jar/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/json-lib-jar/ezmorph-1.0.6.jar"/>
-	<classpathentry kind="lib" path="/Users/sherry/Desktop/searchEn/mytools/json-lib-jar/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/pdfbox-1.8.13.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/fontbox-1.8.13.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/jsoup-1.10.2.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="F:/Search-Engine-Project/WebRoot/WEB-INF/lib/json-lib-jar/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

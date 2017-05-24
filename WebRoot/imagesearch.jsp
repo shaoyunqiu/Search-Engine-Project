@@ -10,42 +10,95 @@ System.out.println(path);
 System.out.println(basePath);
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>搜索</title>
-<style type="text/css">
-<!--
-#Layer1 {
-	position:absolute;
-	left:489px;
-	top:326px;
-	width:404px;
-	height:29px;
-	z-index:1;
-}
-#Layer2 {
-	position:absolute;
-	left:480px;
-	top:68px;
-	width:446px;
-	height:152px;
-	z-index:2;
-}
--->
+<title>TsingNews Search</title>
+<!-- stylesheets -->
+<link href="<%=path %>/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=path %>/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/fonts.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/eden.min.css" rel="stylesheet">
+<link href="<%=path %>/static/animate/css/animate.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/styles.css" rel="stylesheet">
+
+<!-- script references -->
+<script src="<%=path %>/static/jquery/jquery.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.js"></script>
+<script src="<%=path %>/static/jquery/jquery.history.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.scrollto.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.fixer.min.js"></script>
+<script src="<%=path %>/static/bootstrap/js/bootstrap.js"></script>
+<script src="<%=path %>/static/base/js/scripts.js"></script>
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    html,body { height: 100%;}
+    .wrap{
+        min-height: 100%;
+        position: relative;
+    }
+    .main{
+        padding-bottom: 60px;
+    }
+    footer {
+        margin-top: -60px;
+    }
+    #search {
+		 position: absolute;
+		 top: 0;
+		 bottom: 0;
+		 left:30px;
+		 right:0;
+		 margin: auto;
+		 width:40%;
+		 height: 45%;
+	}
 </style>
+
 </head>
 <body>
-<div id="Layer1" style="top: 210px; left: 353px; width: 441px;">
-  <form id="form1" name="form1" method="get" action="servlet/ImageServer">
-    <label>
-      <input name="query" type="text" size="50" />
-    </label>
-    <label>
-    <input type="submit" name="Submit" value="搜索" />
-    </label>
-  </form>
+<!-- header -->
+<div id="top-nav" class="navbar navbar-default navbar-static-top affix">
+    <div class="container-fluid">
+        <div class="nav navbar-nav navbar-left hidden-xs">
+            <a class="fake-link-scroll navbar-brand">“清新”搜索</a>
+            <a class="navbar-brand">&gt;</a>
+            <a class="fake-link-scroll navbar-brand">清华大学新闻搜索平台</a>
+        </div>
+    </div>
+    <!-- /container -->
 </div>
+<!-- /Header -->
+
+<!-- Main -->
+<div class="wrap">
+	<!-- Main page -->
+	 <div id="search">
+	 	<div id="information" class="tab-pane fade active in">
+	        <div style="font-size:71px; text-align:center; margin-bottom:40px; margin-right:60px;">
+	        	TsingNews Search
+	    	</div>
+	    </div>
+		<form class="form" name="form1" method="get" action="servlet/ImageServer" style="width:100%">
+			<label style="width:80%;vertical-align:middle">
+			<input class="form-control" name="query" type="text" style="width:100%; height:36px;vertical-align:middle;"/>
+			</label>
+			<label style="width:15%;vertical-align:middle">
+			<button type="submit" class="btn btn-info" style="width:100%;font-size:15px;">搜索</button>
+			</label>
+		</form>
+	</div>
+	<div class="container-fluid main">
+
+	</div>
+</div>
+<!-- /Main -->
+
+<footer class="text-center">Image Searcher&nbsp; @copyright 2017  shaoyunqiu THUwangcy </footer>
 </body>
 </html>
