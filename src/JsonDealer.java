@@ -57,7 +57,7 @@ public class JsonDealer {
 	}
 	
 	/*public static void main(String[] argv) {
-		JsonDealer jsonDealer = new JsonDealer("data/html/1.json") ;
+		JsonDealer jsonDealer = new JsonDealer("../data/html/1.json") ;
 		jsonDealer.ReadFile();
 		jsonDealer.getContent();
 		System.out.println("id is :" + jsonDealer.id);
