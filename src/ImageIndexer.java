@@ -142,28 +142,9 @@ public class ImageIndexer {
 	public static void main(String[] args) {
 		ImageIndexer indexer=new ImageIndexer("forIndex/index");
 		
-//		String path="../data/html/";
-//        indexer.traverseIndex(path);
-//        indexer.saveGlobals("forIndex/global.txt");
-		String title = "清华大学新闻网新闻网";
-		String currentQuery = "新闻";
-		String temp = title;
-		ArrayList<String> s = new ArrayList();
-		int index = temp.indexOf(currentQuery.trim());
-		while(index > -1) {
-			//System.out.println(temp.substring(0, index));
-			s.add(temp.substring(0, index));
-			s.add(temp.substring(index, index + currentQuery.length()));
-			temp = temp.substring(index + currentQuery.length(), temp.length());
-			index = temp.indexOf(currentQuery.trim());
-		}
-		if (temp.length() > 0) {
-			s.add(temp);
-		}
-		int length = s.size();
-		for(int i = 0; i < length; i ++) {
-			System.out.println(s.get(i));
-		}
+		String path="../data/html/";
+        indexer.traverseIndex(path);
+        indexer.saveGlobals("forIndex/global.txt");
         
 	}
 }

@@ -55,7 +55,7 @@ System.out.println(basePath);
 		 left:30px;
 		 right:0;
 		 margin: auto;
-		 width:40%;
+		 width:50%;
 		 height: 45%;
 	}
 </style>
@@ -80,13 +80,13 @@ System.out.println(basePath);
 	<!-- Main page -->
 	 <div id="search">
 	 	<div id="information" class="tab-pane fade active in">
-	        <div style="font-size:71px; text-align:center; margin-bottom:40px; margin-right:60px;">
+	        <div style="font-size:62px; text-align:center; margin-bottom:40px; margin-right:69px;">
 	        	TsingNews Search
 	    	</div>
 	    </div>
 		<form class="form" name="form1" method="get" action="servlet/ImageServer" style="width:100%">
 			<label style="width:80%;vertical-align:middle">
-			<input class="form-control" name="query" type="text" style="width:100%; height:36px;vertical-align:middle;"/>
+			<input class="form-control" name="query" type="text" style="width:100%; height:40px;vertical-align:middle;"/>
 			</label>
 			<label style="width:15%;vertical-align:middle">
 			<button type="submit" class="btn btn-info" style="width:100%;font-size:15px;">搜索</button>

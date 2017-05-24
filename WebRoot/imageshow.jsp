@@ -76,7 +76,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 			<form class="form" name="form1" method="get" action="ImageServer" style="width:70%">
 				<div>
 				<label style="width:80%;vertical-align:middle">
-				<input class="form-control" name="query" value="<%=currentQuery%>" type="text" style="width:100%; height:35px;"/>
+				<input class="form-control" name="query" value="<%=currentQuery%>" type="text" style="width:100%; height:40px;"/>
 				</label>
 				<label style="width:15%;vertical-align:middle">
 				<button type="submit" class="btn btn-info" style="width:100%;font-size:15px">搜索</button>
@@ -89,22 +89,39 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 		 	String[] titles=(String[]) request.getAttribute("titles");
 		 	String[] urls=(String[]) request.getAttribute("urls");
 		 	int hits=(Integer) request.getAttribute("totalNum");
+		 	ArrayList<String> queryWords = (ArrayList<String>) request.getAttribute("queryWords");
 		%>
 		<div id="Layer2">
-		 <div id="imagediv">共搜索到<%=hits %>条新闻（最多展示100张）
+		 <div id="imagediv">共搜索到<%=hits %>条新闻（最多展示100条）
 		 <br></br>
 		 <% 
 		 	if(titles!=null && titles.length>0){
 		 		for(int i=0;i<titles.length;i++){
 		 			String temp = titles[i];
-		 			ArrayList<String> s = new ArrayList();
-		 			int index = temp.indexOf(currentQuery.trim());
+		 			ArrayList<String> s = new ArrayList<String>();
+		 			int turn = 0;
+					int index = temp.indexOf(queryWords.get(0).trim());
+					for(int j = 1; j < queryWords.size(); j ++) {
+						int curIndex = temp.indexOf(queryWords.get(j).trim());
+						if(curIndex > -1 && (index < 0 || curIndex < index)) {
+							turn = j;
+							index = curIndex;
+						}
+					}
 					while(index > -1) {
 						//System.out.println(temp.substring(0, index));
 						s.add(temp.substring(0, index));
-						s.add(temp.substring(index, index + currentQuery.trim().length()));
-						temp = temp.substring(index + currentQuery.trim().length(), temp.length());
-						index = temp.indexOf(currentQuery.trim());
+						s.add(temp.substring(index, index + queryWords.get(turn).length()));
+						temp = temp.substring(index + queryWords.get(turn).length(), temp.length());
+						turn = 0;
+						index = temp.indexOf(queryWords.get(0).trim());
+						for(int j = 1; j < queryWords.size(); j ++) {
+							int curIndex = temp.indexOf(queryWords.get(j).trim());
+							if(curIndex > -1 && (index < 0 || curIndex < index)) {
+								turn = j;
+								index = curIndex;
+							}
+						}
 					}
 					if (temp.length() > 0) {
 						s.add(temp);
@@ -114,12 +131,18 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 		 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
 				  			<p style="font-size:0px;display:inline;"><%=(currentPage-1)*10+i+1%>. 
 				  			<%for(int j = 0; j < length; j ++) {
-				  				if(s.get(j).indexOf(currentQuery) < 0) {%>
-				  					<span style="font-size:21px;"><%=s.get(j).trim()%></span>
-				  			<% } else {%>
-				  					<span style="color:red;font-size:21px;"><%=s.get(j).trim() %></span>
-				  			<% };
-				  			};%>
+				  				boolean findFlag = false;
+				  				for(int k = 0; k < queryWords.size(); k ++) {
+					  				if(s.get(j).indexOf(queryWords.get(k)) > -1) {
+					  					findFlag = true;%>
+					  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
+					  			 <% 	break;    
+					  			    }
+					  			}
+					  			if(!findFlag) {%>
+				  					<span style="font-size:21px;"><%=s.get(j).trim() %></span>
+				  			<%  }
+				  			}%>
 				  			</p>
 				  			<hr>
 				  			</br>	

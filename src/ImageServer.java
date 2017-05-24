@@ -61,6 +61,7 @@ public class ImageServer extends HttpServlet{
 			String[] titles=null;
 			String[] urls=null;
 			TopDocs results=search.searchQuery(queryString, "title", 100);
+			ArrayList<String> queryWords = search.splitQuery(queryString);
 			if (results != null) {
 				ScoreDoc[] hits = showList(results.scoreDocs, page);
 				if (hits != null) {
@@ -84,6 +85,7 @@ public class ImageServer extends HttpServlet{
 			int Num = (results == null ? 0 : results.scoreDocs.length);
 			request.setAttribute("currentQuery",queryString);
 			request.setAttribute("currentPage", page);
+			request.setAttribute("queryWords", queryWords);
 			request.setAttribute("titles", titles);
 			request.setAttribute("urls", urls);
 			request.setAttribute("totalNum", Num);
