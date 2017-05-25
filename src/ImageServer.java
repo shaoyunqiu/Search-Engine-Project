@@ -58,21 +58,22 @@ public class ImageServer extends HttpServlet{
 			System.out.println(queryString);
 			System.out.println(URLDecoder.decode(queryString,"utf-8"));
 			System.out.println(URLDecoder.decode(queryString,"gb2312"));
-			String[] tags=null;
-			String[] paths=null;
-			TopDocs results=search.searchQuery(queryString, "abstract", 100);
+			String[] titles=null;
+			String[] urls=null;
+			TopDocs results=search.searchQuery(queryString, "title", 100);
+			ArrayList<String> queryWords = search.splitQuery(queryString);
 			if (results != null) {
 				ScoreDoc[] hits = showList(results.scoreDocs, page);
 				if (hits != null) {
-					tags = new String[hits.length];
-					paths = new String[hits.length];
+					titles = new String[hits.length];
+					urls = new String[hits.length];
 					for (int i = 0; i < hits.length && i < PAGE_RESULT; i++) {
 						Document doc = search.getDoc(hits[i].doc);
 						System.out.println("doc=" + hits[i].doc + " score="
-								+ hits[i].score + " picPath= "
-								+ doc.get("picPath")+ " tag= "+doc.get("abstract"));
-						tags[i] = doc.get("abstract");
-						paths[i] = picDir + doc.get("picPath");
+								+ hits[i].score + " url= "
+								+ doc.get("url")+ " title= "+doc.get("title"));
+						titles[i] = doc.get("title");
+						urls[i] = doc.get("url");
 					}
 
 				} else {
@@ -81,10 +82,13 @@ public class ImageServer extends HttpServlet{
 			}else{
 				System.out.println("result null");
 			}
+			int Num = (results == null ? 0 : results.scoreDocs.length);
 			request.setAttribute("currentQuery",queryString);
 			request.setAttribute("currentPage", page);
-			request.setAttribute("imgTags", tags);
-			request.setAttribute("imgPaths", paths);
+			request.setAttribute("queryWords", queryWords);
+			request.setAttribute("titles", titles);
+			request.setAttribute("urls", urls);
+			request.setAttribute("totalNum", Num);
 			request.getRequestDispatcher("/imageshow.jsp").forward(request,
 					response);
 		}

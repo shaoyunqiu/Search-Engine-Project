@@ -7,39 +7,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/";
 %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<style type="text/css">
-<!--
-#Layer1 {
-	position:absolute;
-	left:28px;
-	top:26px;
-	width:649px;
-	height:32px;
-	z-index:1;
-}
-#Layer2 {
-	position:absolute;
-	left:29px;
-	top:82px;
-	width:648px;
-	height:602px;
-	z-index:2;
-}
-#Layer3 {
-	position:absolute;
-	left:28px;
-	top:697px;
-	width:652px;
-	height:67px;
-	z-index:3;
-}
--->
+<title>TsingNews Search</title>
+<!-- stylesheets -->
+<link href="<%=path %>/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=path %>/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/fonts.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/eden.min.css" rel="stylesheet">
+<link href="<%=path %>/static/animate/css/animate.min.css" rel="stylesheet">
+<link href="<%=path %>/static/base/css/styles.css" rel="stylesheet">
+
+<!-- script references -->
+<script src="<%=path %>/static/jquery/jquery.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.js"></script>
+<script src="<%=path %>/static/jquery/jquery.history.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.scrollto.min.js"></script>
+<script src="<%=path %>/static/jquery/jquery.fixer.min.js"></script>
+<script src="<%=path %>/static/bootstrap/js/bootstrap.js"></script>
+<script src="<%=path %>/static/base/js/scripts.js"></script>
+
+
+
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    html,body { height: 100%;}
+    .wrap{
+        min-height: 100%;
+        position: relative;
+    }
+    .main{
+        padding-bottom: 60px;
+    }
+    footer {
+        margin-top: -60px;
+    }
 </style>
+
 </head>
 
 <body>
@@ -47,54 +56,128 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 	String currentQuery=(String) request.getAttribute("currentQuery");
 	int currentPage=(Integer) request.getAttribute("currentPage");
 %>
-<div id="Layer1">
-  <form id="form1" name="form1" method="get" action="ImageServer">
-    <label>
-      <input name="query" value="<%=currentQuery%>" type="text" size="70" />
-    </label>
-    <label>
-    <input type="submit" name="Submit" value="查询" />
-    </label>
-  </form>
+<!-- header -->
+<div id="top-nav" class="navbar navbar-default navbar-static-top affix">
+    <div class="container-fluid">
+        <div class="nav navbar-nav navbar-left hidden-xs">
+            <a class="fake-link-scroll navbar-brand">“清新”搜索</a>
+            <a class="navbar-brand">&gt;</a>
+            <a class="navbar-brand" href="<%=path %>/imagesearch.jsp">回到主页</a>
+        </div>
+    </div>
+    <!-- /container -->
 </div>
-<div id="Layer2" style="top: 82px; height: 585px;">
-  <div id="imagediv">结果显示如下：
-  <br>
-  <Table style="left: 0px; width: 594px;">
-  <% 
-  	String[] imgTags=(String[]) request.getAttribute("imgTags");
-  	String[] imgPaths=(String[]) request.getAttribute("imgPaths");
-  	if(imgTags!=null && imgTags.length>0){
-  		for(int i=0;i<imgTags.length;i++){%>
-  		<p>
-  		<tr><h3><%=(currentPage-1)*10+i+1%>. <%=imgTags[i] %></h3></tr>
-  		<tr><img src="<%=imagePath+imgPaths[i]%>" alt="<%=imagePath+imgPaths[i]%>" width=200 height=100 /></tr>
-  		</p>
-  		<%}; %>
-  	<%}else{ %>
-  		<p><tr><h3>no such result</h3></tr></p>
-  	<%}; %>
-  </Table>
-  </div>
-  <div>
-  	<p>
-		<%if(currentPage>1){ %>
-			<a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage-1%>">上一页</a>
-		<%}; %>
-		<%for (int i=Math.max(1,currentPage-5);i<currentPage;i++){%>
-			<a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a>
-		<%}; %>
-		<strong><%=currentPage%></strong>
-		<%for (int i=currentPage+1;i<=currentPage+5;i++){ %>
-			<a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a>
-		<%}; %>
-		<a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage+1%>">下一页</a>
-	</p>
-  </div>
+<!-- /Header -->
+<!-- Main -->
+<div class="wrap">
+	<div class="container-fluid main">
+		<!-- Main page -->
+		<div id="Layer1" style="width:100%">
+			<form class="form" name="form1" method="get" action="ImageServer" style="width:70%">
+				<div>
+				<label style="width:80%;vertical-align:middle">
+				<input class="form-control" name="query" value="<%=currentQuery%>" type="text" style="width:100%; height:40px;"/>
+				</label>
+				<label style="width:15%;vertical-align:middle">
+				<button type="submit" class="btn btn-info" style="width:100%;font-size:15px">搜索</button>
+				</label>
+				</div>
+			</form>
+		</div>
+		<br>
+		<% 
+		 	String[] titles=(String[]) request.getAttribute("titles");
+		 	String[] urls=(String[]) request.getAttribute("urls");
+		 	int hits=(Integer) request.getAttribute("totalNum");
+		 	ArrayList<String> queryWords = (ArrayList<String>) request.getAttribute("queryWords");
+		%>
+		<div id="Layer2">
+		 <div id="imagediv">共搜索到<%=hits %>条新闻（最多展示100条）
+		 <br></br>
+		 <% 
+		 	if(titles!=null && titles.length>0){
+		 		for(int i=0;i<titles.length;i++){
+		 			String temp = titles[i];
+		 			ArrayList<String> s = new ArrayList<String>();
+		 			int turn = 0;
+					int index = temp.indexOf(queryWords.get(0).trim());
+					for(int j = 1; j < queryWords.size(); j ++) {
+						int curIndex = temp.indexOf(queryWords.get(j).trim());
+						if(curIndex > -1 && (index < 0 || curIndex < index)) {
+							turn = j;
+							index = curIndex;
+						}
+					}
+					while(index > -1) {
+						//System.out.println(temp.substring(0, index));
+						s.add(temp.substring(0, index));
+						s.add(temp.substring(index, index + queryWords.get(turn).length()));
+						temp = temp.substring(index + queryWords.get(turn).length(), temp.length());
+						turn = 0;
+						index = temp.indexOf(queryWords.get(0).trim());
+						for(int j = 1; j < queryWords.size(); j ++) {
+							int curIndex = temp.indexOf(queryWords.get(j).trim());
+							if(curIndex > -1 && (index < 0 || curIndex < index)) {
+								turn = j;
+								index = curIndex;
+							}
+						}
+					}
+					if (temp.length() > 0) {
+						s.add(temp);
+					}
+					int length = s.size();%>
+		 		<div style="width:56%">
+		 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
+				  			<p style="font-size:0px;display:inline;"><%=(currentPage-1)*10+i+1%>. 
+				  			<%for(int j = 0; j < length; j ++) {
+				  				boolean findFlag = false;
+				  				for(int k = 0; k < queryWords.size(); k ++) {
+					  				if(s.get(j).indexOf(queryWords.get(k)) > -1) {
+					  					findFlag = true;%>
+					  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
+					  			 <% 	break;    
+					  			    }
+					  			}
+					  			if(!findFlag) {%>
+				  					<span style="font-size:21px;"><%=s.get(j).trim() %></span>
+				  			<%  }
+				  			}%>
+				  			</p>
+				  			<hr>
+				  			</br>	
+				 		</a>
+			 		
+			 	</div>
+		 		<%}; %>
+		 	<%}else{ %>
+		 		<br>
+		 		<strong style="font-size:40px;">没有找到相关新闻</strong>
+		 	<%}; %>
+		 </div>
+		 <%if(hits > 10) { 
+		   int maxPage = hits / 10 + (hits % 10 == 0 ? 0 : 1);%>
+		 <div class="pull-left" width="56%">
+		 	<ul class="pagination pull-right">
+				<%if(currentPage>1){ %>
+					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage-1%>">&laquo;</a></li>
+				<%}; %>
+				<%for (int i=Math.max(1,currentPage-5);i<currentPage;i++){%>
+					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a></li>
+				<%}; %>
+				<li class="active"><a href="#"><%=currentPage%></a></li>
+				<%for (int i=currentPage+1;i<=maxPage;i++){ %>
+					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a></li>
+				<%}; %>
+				<%if(currentPage < maxPage){ %>
+					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage+1%>">&raquo;</a></li>
+				<%}; %>
+			</ul>
+		  </div>
+		  <%}; %>
+		</div>
+	</div>
 </div>
-<div id="Layer3" style="top: 839px; left: 27px;">
-	
-</div>
-<div>
-</div>
+<!-- /Main -->
+
 </body>
