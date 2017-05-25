@@ -60,6 +60,7 @@ public class ImageServer extends HttpServlet{
 			System.out.println(URLDecoder.decode(queryString,"gb2312"));
 			String[] titles=null;
 			String[] urls=null;
+			String[] contents=null;
 			TopDocs results=search.searchQuery(queryString, "title", 100);
 			ArrayList<String> queryWords = search.splitQuery(queryString);
 			if (results != null) {
@@ -67,6 +68,7 @@ public class ImageServer extends HttpServlet{
 				if (hits != null) {
 					titles = new String[hits.length];
 					urls = new String[hits.length];
+					contents = new String[hits.length];
 					for (int i = 0; i < hits.length && i < PAGE_RESULT; i++) {
 						Document doc = search.getDoc(hits[i].doc);
 						System.out.println("doc=" + hits[i].doc + " score="
@@ -74,6 +76,7 @@ public class ImageServer extends HttpServlet{
 								+ doc.get("url")+ " title= "+doc.get("title"));
 						titles[i] = doc.get("title");
 						urls[i] = doc.get("url");
+						contents[i] = doc.get("content");
 					}
 
 				} else {
@@ -88,6 +91,7 @@ public class ImageServer extends HttpServlet{
 			request.setAttribute("queryWords", queryWords);
 			request.setAttribute("titles", titles);
 			request.setAttribute("urls", urls);
+			request.setAttribute("contents", contents);
 			request.setAttribute("totalNum", Num);
 			request.getRequestDispatcher("/imageshow.jsp").forward(request,
 					response);

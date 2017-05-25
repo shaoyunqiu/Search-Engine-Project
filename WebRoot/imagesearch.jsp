@@ -99,6 +99,6 @@ System.out.println(basePath);
 </div>
 <!-- /Main -->
 
-<footer class="text-center">Image Searcher&nbsp; @copyright 2017  shaoyunqiu THUwangcy </footer>
+<footer class="text-center">TsingNews Search&nbsp; @copyright 2017  shaoyunqiu THUwangcy </footer>
 </body>
 </html>

@@ -94,15 +94,21 @@ public class ImageIndexer {
     		String title = jo.getString("title");
     		String id = jo.getString("id");
     		String url = UrlNorm.urlNormalize(jo.getString("url"));
+    		String content = title;
+    		for(int i = 0; i < 10; i ++) {
+    			content += ('，' + title);
+    		}
     		Document document  =   new  Document();
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
 			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
 			Field idField = new Field("id" ,id,Field.Store.YES, Field.Index.NO);
+			Field contentField = new Field("content", content,Field.Store.YES, Field.Index.ANALYZED);
 			
 			averageLength += title.length();
 			document.add(titleField);
 			document.add(urlField);
 			document.add(idField);
+			document.add(contentField);
 			indexWriter.addDocument(document);
 		}catch(Exception e){
 			e.printStackTrace();

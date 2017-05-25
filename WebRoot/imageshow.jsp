@@ -88,6 +88,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 		<% 
 		 	String[] titles=(String[]) request.getAttribute("titles");
 		 	String[] urls=(String[]) request.getAttribute("urls");
+		 	String[] contents=(String[]) request.getAttribute("contents");
 		 	int hits=(Integer) request.getAttribute("totalNum");
 		 	ArrayList<String> queryWords = (ArrayList<String>) request.getAttribute("queryWords");
 		%>
@@ -126,7 +127,17 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 					if (temp.length() > 0) {
 						s.add(temp);
 					}
-					int length = s.size();%>
+					int length = s.size();
+					
+					if (contents[i].length() > 120) {
+						contents[i] = contents[i].substring(0,120);
+						contents[i] += "...";
+					}
+					String urlDisplay = "";
+					if (urls[i].length() > 80) {
+						urlDisplay = urls[i].substring(0,80);
+						urlDisplay += "...";
+					}%>
 		 		<div style="width:56%">
 		 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
 				  			<p style="font-size:0px;display:inline;"><%=(currentPage-1)*10+i+1%>. 
@@ -138,15 +149,24 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 					  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
 					  			 <% 	break;    
 					  			    }
-					  			}
+					  			};
 					  			if(!findFlag) {%>
-				  					<span style="font-size:21px;"><%=s.get(j).trim() %></span>
-				  			<%  }
-				  			}%>
+				  					<span style="color:#0000B0;font-size:21px;"><%=s.get(j).trim() %></span>
+				  			<%  };
+				  			};%>
 				  			</p>
-				  			<hr>
-				  			</br>	
+				  				
 				 		</a>
+				 		
+				 		<p style="font-size:0px;">
+			  				<span style="font-size:14px;letter-spacing:1px;"><%=contents[i] %></span>
+			  				<a class="fake-link" href="<%=urls[i]%>" target="_blank" >
+				  				<span style="color:#00A000;font-size:13px;padding-top:10px;"><%=urlDisplay %></span>
+				  			</a>
+			  			</p>
+			  			
+			  			<hr>
+			  			</br>
 			 		
 			 	</div>
 		 		<%}; %>
