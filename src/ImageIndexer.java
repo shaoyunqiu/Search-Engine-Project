@@ -16,10 +16,14 @@ import org.apache.lucene.util.Version;
 
 import javax.xml.parsers.*; 
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public class ImageIndexer {
 	private Analyzer analyzer; 
     private IndexWriter indexWriter;
     private float averageLength=1.0f;
+    private int fileNum = 0;
     
     public ImageIndexer(String indexDir){
     	analyzer = new IKAnalyzer();
@@ -43,6 +47,42 @@ public class ImageIndexer {
     		e.printStackTrace();
     	}
     }
+    
+    public JSONObject readJson(String filename) {
+        File file=new File(filename);
+        BufferedReader reader=null;
+        String jsonContent="";
+        JSONObject jo = null;
+        
+        try {
+            reader=new BufferedReader(new FileReader(file));
+            String tempString=null;
+            while((tempString=reader.readLine())!=null){
+                jsonContent+=tempString;
+            }
+            jo = JSONObject.fromObject(jsonContent);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        finally {
+            if(reader!=null){
+	            try {
+	                reader.close();
+	            } catch (IOException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
+            }
+        }
+        return jo;
+    }
+    
+    public String formatURL(String url) {
+    	// TODO format URL
+    	url = "http://" + url;
+    	return url;
+    }
 	
 	/** 
 	 * <p>
@@ -51,44 +91,60 @@ public class ImageIndexer {
 	 */
 	public void indexSpecialFile(String filename){
 		try{
-			//String pdfContent = pdfExtractor.getpdfText("text/test.pdf") ;
-			//System.out.println(pdfContent);
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();   
-			DocumentBuilder db = dbf.newDocumentBuilder();    
-			org.w3c.dom.Document doc = db.parse(new File(filename));
-			NodeList nodeList = doc.getElementsByTagName("pic");
-			for(int i=0;i<nodeList.getLength();i++){
-				Node node=nodeList.item(i);
-				NamedNodeMap map=node.getAttributes();
-				Node locate=map.getNamedItem("locate");
-				Node bigClass=map.getNamedItem("bigClass");
-				Node smallClass=map.getNamedItem("smallClass");
-				Node query=map.getNamedItem("query");
-				String absString=bigClass.getNodeValue()+" "+smallClass.getNodeValue()+" "+query.getNodeValue();
-				Document document  =   new  Document();
-				Field PicPathField  =   new  Field( "picPath" ,locate.getNodeValue(),Field.Store.YES, Field.Index.NO);
-				Field abstractField  =   new  Field( "abstract" ,absString,Field.Store.YES, Field.Index.ANALYZED);
-				averageLength += absString.length();
-				document.add(PicPathField);
-				document.add(abstractField);
-				indexWriter.addDocument(document);
-				if(i%10000==0){
-					System.out.println("process "+i);
-				}
-				//TODO: add other fields such as html title or html content 
-				
+			if(fileNum % 10000==0){
+				System.out.println("process "+fileNum);
 			}
-			averageLength /= indexWriter.numDocs();
-			System.out.println("average length = "+averageLength);
-			System.out.println("total "+indexWriter.numDocs()+" documents");
-			indexWriter.close();
+			fileNum++;
+			
+			JSONObject jo = readJson(filename);
+    		String title = jo.getString("title");
+    		String id = jo.getString("id");
+    		String url = formatURL(jo.getString("url"));
+    		Document document  =   new  Document();
+			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
+			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
+			Field idField = new Field("id" ,id,Field.Store.YES, Field.Index.NO);
+			
+			averageLength += title.length();
+			document.add(titleField);
+			document.add(urlField);
+			document.add(idField);
+			indexWriter.addDocument(document);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
+	
+	public void traverseIndex(String path) {
+    	try {
+	        File rootDir = new File(path);
+	        if (rootDir.exists()) {
+	            File[] files = rootDir.listFiles();
+	            for (File file : files) {
+	            	if (file.getName().indexOf(".json") > -1) {
+	            		String filename = file.getAbsolutePath();
+	            		indexSpecialFile(filename);
+	            	}
+	            }
+	            averageLength /= indexWriter.numDocs();
+				System.out.println("average length = "+averageLength);
+				System.out.println("total "+indexWriter.numDocs()+" documents");
+				indexWriter.close();
+	        } else {
+	            System.out.println("Root dir do not exist!");
+	        }
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+	
+	
 	public static void main(String[] args) {
 		ImageIndexer indexer=new ImageIndexer("forIndex/index");
-		indexer.indexSpecialFile("input/sogou-utf8.xml");
-		indexer.saveGlobals("forIndex/global.txt");
+		
+		String path="../data/html/";
+        indexer.traverseIndex(path);
+        indexer.saveGlobals("forIndex/global.txt");
+        
 	}
 }
