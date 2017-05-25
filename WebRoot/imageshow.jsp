@@ -182,12 +182,12 @@ function DisplayNewDoc(obj) {
     	for (var k = 0; k < queryWordsNum; k ++) {
     		if(splitTitle[i].indexOf(queryWords[k]) > -1) {
     			findFlag = true;
-    			rowHtml += ('<span style="color:red;font-size:21px;">' + splitTitle[i].trim() + '</span>');
+    			rowHtml += ('<span style="color:red;font-size:18px;">' + splitTitle[i].trim() + '</span>');
     			break;
     		}
     	} 
     	if(!findFlag) {
-    		rowHtml += ('<span style="color:#0000B0;font-size:21px;">' + splitTitle[i].trim() + '</span>')
+    		rowHtml += ('<span style="color:#0000B0;font-size:18px;">' + splitTitle[i].trim() + '</span>')
     	}
     }
     rowHtml = rowHtml + '</p> \
@@ -198,12 +198,12 @@ function DisplayNewDoc(obj) {
     	for (var k = 0; k < queryWordsNum; k ++) {
     		if(splitContent[i].indexOf(queryWords[k]) > -1) {
     			findFlag = true;
-    			rowHtml += ('<span style="color:red;font-size:14px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>');
+    			rowHtml += ('<span style="color:red;font-size:12px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>');
     			break;
     		}
     	} 
     	if(!findFlag) {
-    		rowHtml += ('<span style="font-size:14px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>')
+    		rowHtml += ('<span style="font-size:12px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>')
     	}
     }
     rowHtml = rowHtml +	'<br><a class="fake-link" href="' + url + '" target="_blank">\
@@ -372,12 +372,12 @@ function DisplayNewDoc(obj) {
 					  				for(int k = 0; k < queryWords.size(); k ++) {
 						  				if(s.get(j).indexOf(queryWords.get(k)) > -1) {
 						  					findFlag = true;%>
-						  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
+						  					<span style="color:red;font-size:18px;"><%=s.get(j).trim()%></span>
 						  			 <% 	break;    
 						  			    }
 						  			};
 						  			if(!findFlag) {%>
-					  					<span style="color:#0000B0;font-size:21px;"><%=s.get(j).trim() %></span>
+					  					<span style="color:#0000B0;font-size:18px;"><%=s.get(j).trim() %></span>
 					  			<%  };
 					  			};%>
 					  			</p>
@@ -391,12 +391,12 @@ function DisplayNewDoc(obj) {
 					  				for(int k = 0; k < queryWords.size(); k ++) {
 						  				if(splitContent.get(j).indexOf(queryWords.get(k)) > -1) {
 						  					findFlag = true;%>
-						  					<span style="color:red;font-size:14px;letter-spacing:1px;"><%=splitContent.get(j).trim()%></span>
+						  					<span style="color:red;font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim()%></span>
 						  			 <% 	break;    
 						  			    }
 						  			};
 						  			if(!findFlag) {%>
-					  					<span style="font-size:14px;letter-spacing:1px;"><%=splitContent.get(j).trim() %></span>
+					  					<span style="font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim() %></span>
 					  			<%  };
 					  			};%>
 				  				<br>
