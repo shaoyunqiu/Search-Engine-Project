@@ -47,7 +47,196 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
     footer {
         margin-top: -60px;
     }
+    
+    .nav label {
+	    transition: opacity .2s;
+		opacity:0;
+		color:#FFFFFF;
+	    font-size: 100pt;
+	    text-align: center;
+	    font-family: "Varela Round", sans-serif;
+	    background-color: rgba(220, 220, 220, .3);
+	    text-shadow: 0px 0px 15px rgb(119, 119, 119);
+	}
+	.nav label:hover { opacity: 1; }
 </style>
+ 
+<script>
+$().ready(function() {
+	$( ".nav label" ).each(function() {
+		var curRow = $(this).parent().prev();
+		$(this).css("height", curRow.css("height"));
+		$(this).css("line-height", curRow.css("height"));
+		//alert(curRow.css("height"));
+	});
+	$( ".nav label" ).hover(//绑定了鼠标进入和鼠标移开的两个参数  
+	  function() {  
+	  	var curRow = $(this).parent().prev();
+	  	curRow.css("background-color","rgba(220, 220, 220, .3)"); 
+	  }, function() {
+	  	var curRow = $(this).parent().prev();
+	  	curRow.css("background-color","#FFF"); 
+	  }
+	);  
+});
+
+var XMLHttpReq;  
+var replaceNo = 0;
+//创建XMLHttpRequest对象         
+function createXMLHttpRequest() {  
+    if(window.XMLHttpRequest) { //Mozilla 浏览器  
+        XMLHttpReq = new XMLHttpRequest();  
+    }  
+    else if (window.ActiveXObject) { // IE浏览器  
+        try {  
+            XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");  
+        } catch (e) {  
+            try {  
+                XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");  
+            } catch (e) {}  
+        }  
+    }  
+}  
+//发送请求函数  
+function sendRequest(obj) {  
+    createXMLHttpRequest();  
+    var queryString = $("#queryString").html();
+    var page = $("li.active a").html();
+    var requrl = "ImageServer?operation=replace&query=" + queryString + "&page=" + page + "&replaceNo=" + replaceNo; 
+    XMLHttpReq.open("GET", requrl, true);  
+    XMLHttpReq.onreadystatechange = function(){processResponse(obj);};//指定响应函数  
+    XMLHttpReq.send(null);  // 发送请求  
+}  
+// 处理返回信息函数  
+function processResponse(obj) {
+    if (XMLHttpReq.readyState == 4) { // 判断对象状态  
+        if (XMLHttpReq.status == 200) { // 信息已经成功返回，开始处理信息   
+            DisplayNewDoc(obj);   
+        } else { //页面不正常  
+            window.alert("Servlet Error.");  
+        }  
+    }  
+}  
+
+function splitText(queryWords, text, queryWordsNum) {
+	var s = new Array();
+	var turn = 0;
+	var index = text.indexOf(queryWords[0]);
+	for(var j = 0; j < queryWordsNum; j ++) {
+		var curIndex = text.indexOf(queryWords[j].trim());
+		if(curIndex > -1 && (index < 0 || curIndex < index)) {
+			turn = j;
+			index = curIndex;
+		}
+	}
+	while(index > -1) {
+		s.push(text.substring(0, index));
+		s.push(text.substring(index, index + queryWords[turn].length));
+		text = text.substring(index + queryWords[turn].length, text.length);
+		turn = 0;
+		index = text.indexOf(queryWords[0].trim());
+		for(var j = 1; j < queryWordsNum; j ++) {
+			var curIndex = text.indexOf(queryWords[j].trim());
+			if(curIndex > -1 && (index < 0 || curIndex < index)) {
+				turn = j;
+				index = curIndex;
+			}
+		}
+	}
+	if (text.length > 0) {
+		s.push(text);
+	}
+	return s;
+}
+
+function DisplayNewDoc(obj) { 
+	var curRow = $(obj).prev();
+	var rowParent = $(obj).parent();
+	var curHeight = curRow.css("height");
+    var title = XMLHttpReq.responseXML.getElementsByTagName("title")[0].firstChild.nodeValue;  
+    var url = XMLHttpReq.responseXML.getElementsByTagName("url")[0].firstChild.nodeValue;  
+    var content = XMLHttpReq.responseXML.getElementsByTagName("content")[0].firstChild.nodeValue;
+    var queryWordsNum = XMLHttpReq.responseXML.getElementsByTagName("queryWords").length;
+    var queryWords = new Array(queryWordsNum);
+    for (var i = 0; i < queryWordsNum; i ++) {
+    	var queryWord = XMLHttpReq.responseXML.getElementsByTagName("queryWords")[i].firstChild.nodeValue;
+    	queryWords[i] = queryWord;
+    } 
+    replaceNo += 1;
+    var splitTitle = splitText(queryWords, title, queryWordsNum);
+    if (content.length > 120) {
+    	content = content.substring(0, 120);
+    	content += "...";
+    }
+    var splitContent = splitText(queryWords, content, queryWordsNum);
+    var urlDisplay = url;
+    if (url.length > 80) {
+    	urlDisplay = url.substring(0, 80);
+    	urlDisplay += "...";
+    }
+    var rowHtml = '<div class="col-xs-7" >\
+    				<a class="fake-link" href="' + url + '" target="_blank">' +
+    					'<p style="font-size:0px;display:inline;">';
+    for (var i = 0; i < splitTitle.length; i ++) {
+    	var findFlag = false;
+    	for (var k = 0; k < queryWordsNum; k ++) {
+    		if(splitTitle[i].indexOf(queryWords[k]) > -1) {
+    			findFlag = true;
+    			rowHtml += ('<span style="color:red;font-size:21px;">' + splitTitle[i].trim() + '</span>');
+    			break;
+    		}
+    	} 
+    	if(!findFlag) {
+    		rowHtml += ('<span style="color:#0000B0;font-size:21px;">' + splitTitle[i].trim() + '</span>')
+    	}
+    }
+    rowHtml = rowHtml + '</p> \
+    				</a> \
+    				<p style="font-size:0px;">';
+    for (var i = 0; i < splitContent.length; i ++) {
+    	var findFlag = false;
+    	for (var k = 0; k < queryWordsNum; k ++) {
+    		if(splitContent[i].indexOf(queryWords[k]) > -1) {
+    			findFlag = true;
+    			rowHtml += ('<span style="color:red;font-size:14px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>');
+    			break;
+    		}
+    	} 
+    	if(!findFlag) {
+    		rowHtml += ('<span style="font-size:14px;letter-spacing:1px;">' + splitContent[i].trim() + '</span>')
+    	}
+    }
+    rowHtml = rowHtml +	'<br><a class="fake-link" href="' + url + '" target="_blank">\
+    						<span style="color:#00A000;font-size:13px;padding-top:10px;">' + urlDisplay + '</span>\
+    					</a>\
+    				</p>\
+    			</div>\
+    			<div onclick=sendRequest(this) class="col-xs-2 nav">\
+					<label style="width:110px;">&#x203a;</label>\
+				</div>';
+    rowParent.animate({opacity:0}, 200);
+    setTimeout(function(){
+    	rowParent.html(rowHtml);
+    	rowParent.children().each(function() {
+    		$(this).css("height", curHeight);
+   			var arrowLabel = $(this).find("label");
+   			$( ".nav label" ).hover(//绑定了鼠标进入和鼠标移开的两个参数  
+				function() {  
+					var curRow = $(this).parent().prev();
+					curRow.css("background-color","rgba(220, 220, 220, .3)"); 
+				}, function() {
+					var curRow = $(this).parent().prev();
+					curRow.css("background-color","#FFF"); 
+				}
+			); 
+    		arrowLabel.css("height", curHeight);
+    		arrowLabel.css("line-height", curHeight);
+    	});
+    },200)
+    rowParent.animate({opacity:1}, 400);
+    //alert(title);      
+}
+</script>
 
 </head>
 
@@ -85,6 +274,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 			</form>
 		</div>
 		<br>
+		<span id="queryString" style="display:none;"><%=currentQuery %></span>
 		<% 
 		 	String[] titles=(String[]) request.getAttribute("titles");
 		 	String[] urls=(String[]) request.getAttribute("urls");
@@ -98,6 +288,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 		 <% 
 		 	if(titles!=null && titles.length>0){
 		 		for(int i=0;i<titles.length;i++){
+		 			// 按查询分词分割title
 		 			String temp = titles[i];
 		 			ArrayList<String> s = new ArrayList<String>();
 		 			int turn = 0;
@@ -129,45 +320,100 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 					}
 					int length = s.size();
 					
+					// 截取content长度为120
 					if (contents[i].length() > 120) {
 						contents[i] = contents[i].substring(0,120);
 						contents[i] += "...";
 					}
+					// 按查询分词分割content
+					temp = contents[i];
+		 			ArrayList<String> splitContent = new ArrayList<String>();
+		 			turn = 0;
+					index = temp.indexOf(queryWords.get(0).trim());
+					for(int j = 1; j < queryWords.size(); j ++) {
+						int curIndex = temp.indexOf(queryWords.get(j).trim());
+						if(curIndex > -1 && (index < 0 || curIndex < index)) {
+							turn = j;
+							index = curIndex;
+						}
+					}
+					while(index > -1) {
+						//System.out.println(temp.substring(0, index));
+						splitContent.add(temp.substring(0, index));
+						splitContent.add(temp.substring(index, index + queryWords.get(turn).length()));
+						temp = temp.substring(index + queryWords.get(turn).length(), temp.length());
+						turn = 0;
+						index = temp.indexOf(queryWords.get(0).trim());
+						for(int j = 1; j < queryWords.size(); j ++) {
+							int curIndex = temp.indexOf(queryWords.get(j).trim());
+							if(curIndex > -1 && (index < 0 || curIndex < index)) {
+								turn = j;
+								index = curIndex;
+							}
+						}
+					}
+					if (temp.length() > 0) {
+						splitContent.add(temp);
+					}
+					int lengthContent = splitContent.size();
+					
+					// 展示的url
 					String urlDisplay = "";
 					if (urls[i].length() > 80) {
 						urlDisplay = urls[i].substring(0,80);
 						urlDisplay += "...";
 					}%>
-		 		<div style="width:56%">
-		 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
-				  			<p style="font-size:0px;display:inline;"><%=(currentPage-1)*10+i+1%>. 
-				  			<%for(int j = 0; j < length; j ++) {
-				  				boolean findFlag = false;
-				  				for(int k = 0; k < queryWords.size(); k ++) {
-					  				if(s.get(j).indexOf(queryWords.get(k)) > -1) {
-					  					findFlag = true;%>
-					  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
-					  			 <% 	break;    
-					  			    }
-					  			};
-					  			if(!findFlag) {%>
-				  					<span style="color:#0000B0;font-size:21px;"><%=s.get(j).trim() %></span>
-				  			<%  };
-				  			};%>
+				<div class="row" style="font-size:0px;">
+			 		<div class="col-xs-7" >
+			 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
+					  			<p style="font-size:0px;display:inline;"><%=(currentPage-1)*10+i+1%>. 
+					  			<%for(int j = 0; j < length; j ++) {
+					  				boolean findFlag = false;
+					  				for(int k = 0; k < queryWords.size(); k ++) {
+						  				if(s.get(j).indexOf(queryWords.get(k)) > -1) {
+						  					findFlag = true;%>
+						  					<span style="color:red;font-size:21px;"><%=s.get(j).trim()%></span>
+						  			 <% 	break;    
+						  			    }
+						  			};
+						  			if(!findFlag) {%>
+					  					<span style="color:#0000B0;font-size:21px;"><%=s.get(j).trim() %></span>
+					  			<%  };
+					  			};%>
+					  			</p>
+					  				
+					 		</a>
+					 		
+					 		<p style="font-size:0px;">
+					 			<%
+					 			for(int j = 0; j < lengthContent; j ++) {
+					  				boolean findFlag = false;
+					  				for(int k = 0; k < queryWords.size(); k ++) {
+						  				if(splitContent.get(j).indexOf(queryWords.get(k)) > -1) {
+						  					findFlag = true;%>
+						  					<span style="color:red;font-size:14px;letter-spacing:1px;"><%=splitContent.get(j).trim()%></span>
+						  			 <% 	break;    
+						  			    }
+						  			};
+						  			if(!findFlag) {%>
+					  					<span style="font-size:14px;letter-spacing:1px;"><%=splitContent.get(j).trim() %></span>
+					  			<%  };
+					  			};%>
+				  				<br>
+				  				<a class="fake-link" href="<%=urls[i]%>" target="_blank" >
+					  				<span style="color:#00A000;font-size:13px;padding-top:10px;"><%=urlDisplay %></span>
+					  			</a>
 				  			</p>
-				  				
-				 		</a>
-				 		
-				 		<p style="font-size:0px;">
-			  				<span style="font-size:14px;letter-spacing:1px;"><%=contents[i] %></span>
-			  				<a class="fake-link" href="<%=urls[i]%>" target="_blank" >
-				  				<span style="color:#00A000;font-size:13px;padding-top:10px;"><%=urlDisplay %></span>
-				  			</a>
-			  			</p>
-			  			
-			  			<hr>
-			  			</br>
-			 		
+				  			
+				 	</div>
+				 	<div onclick=sendRequest(this) class="col-xs-2 nav">
+				 		<label style="width:110px;">&#x203a;</label>
+				 	</div>
+			 	</div>
+			 	<div class="row" style="font-size:0px">
+			 		<div class="col-xs-7">
+			 			<hr style="margin-bottom:10px;">
+			 		</div>
 			 	</div>
 		 		<%}; %>
 		 	<%}else{ %>
