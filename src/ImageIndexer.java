@@ -77,12 +77,6 @@ public class ImageIndexer {
         }
         return jo;
     }
-    
-    public String formatURL(String url) {
-    	// TODO format URL
-    	url = "http://" + url;
-    	return url;
-    }
 	
 	/** 
 	 * <p>
@@ -99,7 +93,7 @@ public class ImageIndexer {
 			JSONObject jo = readJson(filename);
     		String title = jo.getString("title");
     		String id = jo.getString("id");
-    		String url = formatURL(jo.getString("url"));
+    		String url = UrlNorm.urlNormalize(jo.getString("url"));
     		Document document  =   new  Document();
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
 			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
