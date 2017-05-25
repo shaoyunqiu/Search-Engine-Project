@@ -41,10 +41,10 @@ public class PageGrapgh {
 			String path = "../data/html" ;
 			for(int i = 0 ; i < 52305 ; i++){
 				String filename = path + "/" + Integer.toString(i) + ".html" ;
-				File input = new File(filename) ;
-				if(input.exists()){
+				HtmlContent myhtml = new HtmlContent(filename) ;
+				if(myhtml.createDoc()){
 					String ans = Integer.toString(i) + ":" ;
-					ArrayList<String> urls = HtmlContent.getLinksAll(input) ;
+					ArrayList<String> urls = myhtml.getLinksAll()  ;
 					ArrayList<Integer> ids = pageGrapgh.url2int(urls) ;
 					int size = ids.size() ;
 					if(size == 0) continue ;
