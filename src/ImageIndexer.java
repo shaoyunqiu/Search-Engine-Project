@@ -164,22 +164,37 @@ public class ImageIndexer {
 				pr = PRMap.get(new Integer(id)) ;
 			}
     		Document document  =   new  Document();
+    		
+    		float pr2square = (float) Math.sqrt(pr) ; 
+    		document.setBoost(pr2square); // use pagerank as boost for this doc
+    		
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
+			titleField.setBoost(60.0f);
 			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
 			Field idField = new Field("id", Integer.toString(id), Field.Store.YES, Field.Index.NO) ;
 			Field prField = new Field("pagerank", pr.toString(), Field.Store.YES, Field.Index.NO) ;
 			Field bodytextField = new Field("bodytext", bodytext, Field.Store.YES, Field.Index.ANALYZED) ;
+			bodytextField.setBoost(0.5f);
 			Field hrefField = new Field("hreftext", hreftext, Field.Store.YES, Field.Index.ANALYZED) ;
+			hrefField.setBoost(5.0f);
 			Field keywordsField = new Field("keywords", keywords, Field.Store.YES, Field.Index.ANALYZED);
+			keywordsField.setBoost(50.0f);
 			Field contentField = new Field("content", content, Field.Store.YES, Field.Index.ANALYZED) ;
+			contentField.setBoost(2.0f);
 			Field h1Field = new Field("h1", headtext.get(0), Field.Store.YES, Field.Index.ANALYZED) ;
+			h1Field.setBoost(36.0f);
 			Field h2Field = new Field("h2", headtext.get(1), Field.Store.YES, Field.Index.ANALYZED) ;
+			h2Field.setBoost(30.0f);
 			Field h3Field = new Field("h3", headtext.get(2), Field.Store.YES, Field.Index.ANALYZED) ;
+			h3Field.setBoost(24.0f);
 			Field h4Field = new Field("h4", headtext.get(3), Field.Store.YES, Field.Index.ANALYZED) ;
+			h4Field.setBoost(18.0f);
 			Field h5Field = new Field("h5", headtext.get(4), Field.Store.YES, Field.Index.ANALYZED) ;
+			h5Field.setBoost(12.0f);
 			Field h6Field = new Field("h6", headtext.get(5), Field.Store.YES, Field.Index.ANALYZED) ;
+			h6Field.setBoost(6.0f);
 			fileNum ++ ;
-			averageLength += title.length(); // need some change
+			averageLength += (title.length()+bodytext.length()+keywords.length()); // need some change
 			document.add(titleField);
 			document.add(urlField);
 			document.add(idField);
