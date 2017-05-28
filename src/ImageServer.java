@@ -60,7 +60,7 @@ public class ImageServer extends HttpServlet{
 			System.out.println(URLDecoder.decode(queryString,"gb2312"));
 			String[] titles=null;
 			String[] urls=null;
-			TopDocs results=search.searchQuery(queryString, "title", 100);
+			TopDocs results=search.searchQuery(queryString, "title", 0, 100); // choice default to be 0 now ;
 			ArrayList<String> queryWords = search.splitQuery(queryString);
 			if (results != null) {
 				ScoreDoc[] hits = showList(results.scoreDocs, page);

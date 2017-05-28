@@ -8,6 +8,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.FieldInvertState;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
@@ -15,9 +16,11 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser.Operator;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.DefaultSimilarity;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.Weight;
@@ -33,6 +36,7 @@ public class ImageSearcher {
 	private Analyzer analyzer;
 	private float avgLength=1.0f;
 	private final int maxTermNum = 100;
+	private int simchoice ;
 	
 	public ImageSearcher(String indexdir){
 		analyzer = new IKAnalyzer();
@@ -70,8 +74,15 @@ public class ImageSearcher {
 		return termlist ;
 	}
 	
-	public TopDocs searchQuery(String queryString,String field,int maxnum){
+	public TopDocs searchQuery(String queryString, String field, int choice,int maxnum){
 		try {
+			simchoice = choice ;
+			if(simchoice == 0){
+				searcher.setSimilarity(new SimpleSimilarity());
+			}
+			else {
+				searcher.setSimilarity(new DefaultSimilarity());
+			}
 			//Term term=new Term(field,queryString);
 			// get split word query
 			//ArrayList<String> querywords = splitQuery(queryString) ;
@@ -103,7 +114,7 @@ public class ImageSearcher {
 			//Query query=new SimpleQuery(term,avgLength);
 			String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext" };
 			Map<String, Float> boosts = new HashMap<String, Float>() ;
-			boosts.put("title", 10.0f) ;
+			boosts.put("title",10.0f) ;
 			boosts.put("keywords", 8.0f) ;
 			boosts.put("h1", 7.0f) ;
 			boosts.put("h2", 6.0f) ;
@@ -160,12 +171,12 @@ public class ImageSearcher {
 		search.loadGlobals("forIndex/global.txt");
 		System.out.println("avg length = "+search.getAvg());
 		
-		TopDocs results=search.searchQuery("小胖", "abstract", 100);
+		/*TopDocs results=search.searchQuery("小胖", "abstract", 100);
 		ScoreDoc[] hits = results.scoreDocs;
 		for (int i = 0; i < hits.length; i++) { // output raw format
 			Document doc = search.getDoc(hits[i].doc);
 			System.out.println("doc=" + hits[i].doc + " score="
 					+ hits[i].score+" picPath= "+doc.get("picPath"));
-		}
+		}*/
 	}
 }

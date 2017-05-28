@@ -40,4 +40,6 @@ In other words, all the query's terms must appear, but it doesn't matter in what
   '''
 
   以上为文档中的内容，没有和理解boosts设置的含义，可能得再调整
+
+  加了搜索方式的选择，choice 为0， 为自定义的Similarity, 否则为系统自带的Similarity. 目前前端默认为0 。
   
