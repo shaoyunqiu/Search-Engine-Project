@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
+import org.apache.lucene.util.SimpleStringInterner;
 
 /**
  * Expert: A <code>Scorer</code> for documents matching a <code>Term</code>.
@@ -20,6 +21,7 @@ final class SimpleScorer extends Scorer {
 	private final int[] freqs = new int[32]; // buffered term freqs
 	private int pointer;
 	private int pointerMax;
+	private IndexReader indexReader ;
 
 	private static final int SCORE_CACHE_SIZE = 32;
 	private final float[] scoreCache = new float[SCORE_CACHE_SIZE];
@@ -52,15 +54,20 @@ final class SimpleScorer extends Scorer {
 	 *            The field norms of the document fields for the
 	 *            <code>Term</code>.
 	 */
-	SimpleScorer(Weight weight, TermDocs td, Similarity similarity,
+	@SuppressWarnings("deprecation")
+	SimpleScorer(Weight weight, TermDocs td, Similarity similarity, IndexReader ir,
 			byte[] norms, float idfValue, float avg) {
+		
 		super(similarity, weight);
+		//SimpleSimilarity sim = (SimpleSimilarity) similarity;
+		//sim.setDiscountOverlaps(false);
 
 		this.termDocs = td;
 		this.norms = norms;
 		this.weightValue = weight.getValue();
 		this.idf = idfValue;
 		this.avgLength = avg;
+		this.indexReader = ir ;
 
 		for (int i = 0; i < SCORE_CACHE_SIZE; i++)
 			scoreCache[i] = getSimilarity().tf(i) * weightValue;
@@ -134,8 +141,12 @@ final class SimpleScorer extends Scorer {
 	public float score() {
 		assert doc != -1;
 		//TODO: implements BM25 ranking algorithm
+		float norm = SimpleSimilarity.decodeNorm(norms[doc]) ;
+		float Dlen = 1.0f/(norm*norm) ;
+		float BM25 = idf*this.termDocs.freq()*(K1+1)/(this.termDocs.freq()+K1*(1-b+b*Dlen/avgLength)) ;
+		return BM25 ;
 		
-		return idf * this.termDocs.freq();
+		//return idf * this.termDocs.freq();
 	}
 
 	/**
