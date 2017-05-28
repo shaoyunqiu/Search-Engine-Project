@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -11,6 +13,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser.Operator;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -21,7 +24,6 @@ import org.apache.lucene.search.Weight;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.wltea.analyzer.lucene.IKAnalyzer;
-
 import org.wltea.analyzer.IKSegmentation;
 import org.wltea.analyzer.Lexeme;
 
@@ -70,13 +72,13 @@ public class ImageSearcher {
 	
 	public TopDocs searchQuery(String queryString,String field,int maxnum){
 		try {
-			Term term=new Term(field,queryString);
+			//Term term=new Term(field,queryString);
 			// get split word query
-			ArrayList<String> querywords = splitQuery(queryString) ;
-			ArrayList<Term> termlist = splitTerms(querywords, field) ; // termlist word use later
+			//ArrayList<String> querywords = splitQuery(queryString) ;
+			//ArrayList<Term> termlist = splitTerms(querywords, field) ; // termlist word use later
 			
 			/* split query into terms */
-			Term[] terms = new Term[maxTermNum];
+			/*Term[] terms = new Term[maxTermNum];
 			int termNum = 0;
 	        System.out.print("Term: ");
 			for(int i = 0; i < termlist.size(); i ++) {
@@ -95,12 +97,27 @@ public class ImageSearcher {
 	        	}
 	        }
 	        System.out.println();
-	        System.out.println("Term Num: " + termNum);
+	        System.out.println("Term Num: " + termNum);*/
 			
 	        
 			//Query query=new SimpleQuery(term,avgLength);
-			String[] fields = { "title" };  
-			Query query = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer).parse(queryString);  
+			String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext" };
+			Map<String, Float> boosts = new HashMap<String, Float>() ;
+			boosts.put("title", 10.0f) ;
+			boosts.put("keywords", 8.0f) ;
+			boosts.put("h1", 7.0f) ;
+			boosts.put("h2", 6.0f) ;
+			boosts.put("h3", 5.0f) ;
+			boosts.put("h4", 4.0f) ;
+			boosts.put("h5", 3.0f) ;
+			boosts.put("h6", 2.0f) ;
+			boosts.put("hreftext", 2.0f) ;
+			boosts.put("content", 1.0f) ;
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, boosts) ;
+			parser.setDefaultOperator(Operator.OR);
+			Query query = parser.parse(queryString) ;
+			System.out.println("QueryParser: " + query.toString());
+			//Query query = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer).parse(queryString);  
 	        //Query query = new MultiQuery(terms, avgLength, termNum, avgLength);
 			query.setBoost(1.0f);
 			//Weight w=searcher.createNormalizedWeight(query);

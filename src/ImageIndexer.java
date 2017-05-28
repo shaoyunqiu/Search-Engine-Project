@@ -180,7 +180,7 @@ public class ImageIndexer {
 			Field keywordsField = new Field("keywords", keywords, Field.Store.YES, Field.Index.ANALYZED);
 			keywordsField.setBoost(50.0f);
 			Field contentField = new Field("content", content, Field.Store.YES, Field.Index.ANALYZED) ;
-			contentField.setBoost(2.0f);
+			contentField.setBoost(1.0f);
 			Field h1Field = new Field("h1", headtext.get(0), Field.Store.YES, Field.Index.ANALYZED) ;
 			h1Field.setBoost(36.0f);
 			Field h2Field = new Field("h2", headtext.get(1), Field.Store.YES, Field.Index.ANALYZED) ;
