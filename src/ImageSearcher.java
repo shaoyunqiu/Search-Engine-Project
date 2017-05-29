@@ -112,7 +112,7 @@ public class ImageSearcher {
 			
 	        
 			//Query query=new SimpleQuery(term,avgLength);
-			String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext" };
+			String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext"};
 			Map<String, Float> boosts = new HashMap<String, Float>() ;
 			boosts.put("title",10.0f) ;
 			boosts.put("keywords", 1.0f/2) ;
@@ -124,6 +124,18 @@ public class ImageSearcher {
 			boosts.put("h6", 1.0f/8) ;
 			boosts.put("hreftext", 1.0f/8) ;
 			boosts.put("content", 5.0f) ;
+			//boosts.put("url", 10.0f) ;
+			
+			/*boosts.put("title",10.0f) ;
+			boosts.put("keywords", 1.0f) ;
+			boosts.put("h1", 0.0f) ;
+			boosts.put("h2", 0.0f) ;
+			boosts.put("h3", 0.0f) ;
+			boosts.put("h4", 0.0f) ;
+			boosts.put("h5", 0.0f) ;
+			boosts.put("h6", 0.0f) ;
+			boosts.put("hreftext", 0.0f) ;
+			boosts.put("content", 5.0f) ;*/
 			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer, boosts) ;
 			parser.setDefaultOperator(Operator.OR);
 			Query query = parser.parse(queryString) ;
