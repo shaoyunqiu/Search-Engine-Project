@@ -24,6 +24,7 @@ public class ImageIndexer {
     private IndexWriter indexWriter;
     private float averageLength=1.0f;
     private int fileNum = 0;
+    Hashtable<String, Boolean> map = new Hashtable<String, Boolean>();
     
     public ImageIndexer(String indexDir){
     	analyzer = new IKAnalyzer();
@@ -98,18 +99,21 @@ public class ImageIndexer {
     		for(int i = 0; i < 10; i ++) {
     			content += ('，' + title);
     		}
-    		Document document  =   new  Document();
-			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
-			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
-			Field idField = new Field("id" ,id,Field.Store.YES, Field.Index.NO);
-			Field contentField = new Field("content", content,Field.Store.YES, Field.Index.ANALYZED);
-			
-			averageLength += title.length();
-			document.add(titleField);
-			document.add(urlField);
-			document.add(idField);
-			document.add(contentField);
-			indexWriter.addDocument(document);
+    		if(map.get(title) == null) {
+    			map.put(title, true);
+	    		Document document  =   new  Document();
+				Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
+				Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
+				Field idField = new Field("id" ,id,Field.Store.YES, Field.Index.NO);
+				Field contentField = new Field("content", content,Field.Store.YES, Field.Index.ANALYZED);
+				
+				averageLength += title.length();
+				document.add(titleField);
+				document.add(urlField);
+				document.add(idField);
+				document.add(contentField);
+				indexWriter.addDocument(document);
+    		}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -145,6 +149,5 @@ public class ImageIndexer {
 		String path="../data/html/";
         indexer.traverseIndex(path);
         indexer.saveGlobals("forIndex/global.txt");
-        
 	}
 }

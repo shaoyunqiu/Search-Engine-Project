@@ -51,7 +51,8 @@ public class ImageServer extends HttpServlet{
 		String replaceString=request.getParameter("replaceNo");
 		String similarityString=(request.getParameter("similarity") == null ? "default" : request.getParameter("similarity"));
 		int similarityChoice = (similarityString.indexOf("simple") >= 0 ? 0 : 1);
-		if (operationString != null && replaceString != null) {
+		// replace a news item
+		if (operationString != null && operationString.indexOf("replace") > -1 && replaceString != null) {
 			int replaceNo=Integer.parseInt(replaceString);
 			int page=Integer.parseInt(pageString);
 			TopDocs results=search.searchQuery(queryString, "title", 100);
@@ -81,6 +82,30 @@ public class ImageServer extends HttpServlet{
 				}
 			}
 		}
+		// request similar query 
+		else if (operationString != null && operationString.indexOf("simQuery") > -1) {
+			System.out.println("SimQuery " + queryString);
+			ArrayList<String> simQuery = new ArrayList<String>();
+			// TODO: add similar query to this list
+			simQuery.add(queryString);
+			simQuery.add(queryString + "返回数据1");  
+			simQuery.add(queryString + "返回数据2");  
+			simQuery.add(queryString + "不是有的人天生吃素的");  
+			simQuery.add(queryString + "不是有的人天生吃素的");  
+			simQuery.add(queryString + "2012是真的");  
+			simQuery.add(queryString + "2012是假的"); 
+			
+			response.setContentType("text/xml; charset=UTF-8");  
+		    response.setHeader("Cache-Control","no-cache");  
+		    PrintWriter out = response.getWriter();
+		    out.println("<response>");  
+		    for (int i = 0; i < simQuery.size(); i ++) {
+		    	out.println("<simQuery>" + simQuery.get(i) + "</simQuery>");
+		    }
+		    out.println("</response>");  
+		    out.close(); 
+		}
+		// request search results
 		else {
 			int page=1;
 			if(pageString!=null){
