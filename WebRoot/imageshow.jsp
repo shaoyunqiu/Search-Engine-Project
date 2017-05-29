@@ -455,7 +455,7 @@ function DisplayNewDoc(obj) {
 		 			// 是否显示图片结果
 		 			boolean imageDisplay = false;
 		 			// 是否显示扩展链接
-		 			boolean extendLinkDisplay = true;
+		 			boolean extendLinkDisplay = false;
 		 			// 按查询分词分割title
 		 			String temp = titles[i];
 		 			ArrayList<String> s = new ArrayList<String>();
