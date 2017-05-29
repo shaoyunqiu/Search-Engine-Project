@@ -142,8 +142,8 @@ public class HtmlContent {
 		return img ;
 	}
 	
-	/*public static void main(String[] argv) {
-		HtmlContent test = new HtmlContent("../data/html/29525.html") ;
+	public static void main(String[] argv) {
+		HtmlContent test = new HtmlContent("../sample/test2.html") ;
 		if(test.createDoc()){
 			String key = test.getKeywords() ;
 			String content = test.getContent() ;
@@ -155,5 +155,5 @@ public class HtmlContent {
 		else {
 			System.out.println("can't open html");
 		}		
-	}*/
+	}
 }

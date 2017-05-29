@@ -5,15 +5,15 @@
 2. 不同域的权重，改变field的setBoost, 可以实现对tf的加权，在建立filed的值设立。
   目前field的内容如下：
     title - analyse, 60, 10
-    keywords - analyse, 50 8
-    h1 - analyse, 36 7
-    h2 - analyse, 30 6
-    h3 - analyse, 24 5
-    h4 - analyse, 18 4
-    h5 - analyse, 12 3
-    h6 - analyse, 6 2
-    herftext - analyse, 5 2
-    content - analyse, 1 2
+    keywords - analyse, 50 1/2
+    h1 - analyse, 36 1/3
+    h2 - analyse, 30 1/4
+    h3 - analyse, 24 1/5
+    h4 - analyse, 18 1/6
+    h5 - analyse, 12 1/7
+    h6 - analyse, 6 2/8
+    herftext - analyse, 5 2/8
+    content - analyse, 1 5
     bodytext - analyse, 0.5 0
     id - not analayse
     pr(pagerank) - not analyse
