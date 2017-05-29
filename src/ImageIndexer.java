@@ -122,6 +122,7 @@ public class ImageIndexer {
 			String bodytext = "" ;
 			String keywords = "" ;
 			String hreftext = "" ;
+			String imgurl = "" ;
 			Double pr = new Double(0) ;
 			String content = "" ;
 			ArrayList<String> headtext = new ArrayList<String>();
@@ -144,6 +145,7 @@ public class ImageIndexer {
 				hreftext = myhtml.getHrefText() ; // all href text
 				keywords = myhtml.getKeywords() ; // <meta name="keywords" content= 
 				content = myhtml.getContent() ; // article tag or class = content div
+				imgurl = myhtml.getimgurl() ; // get the first img url
 				if(PRMap.containsKey(new Integer(id))){
 					pr = PRMap.get(new Integer(id)) ; // pagerank
 				}
@@ -157,6 +159,7 @@ public class ImageIndexer {
 				content = bodytext ;
 				hreftext = "" ;
 				keywords = "" ;
+				imgurl = "" ;
 				headtext.clear();
 				for(int i = 0 ; i < 6 ; i ++){
 					headtext.add("") ;
@@ -171,6 +174,7 @@ public class ImageIndexer {
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
 			titleField.setBoost(60.0f);
 			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
+			Field imgField = new Field("imgurl", imgurl, Field.Store.YES, Field.Index.NO) ;
 			Field idField = new Field("id", Integer.toString(id), Field.Store.YES, Field.Index.NO) ;
 			Field prField = new Field("pagerank", pr.toString(), Field.Store.YES, Field.Index.NO) ;
 			Field bodytextField = new Field("bodytext", bodytext, Field.Store.YES, Field.Index.ANALYZED) ;
@@ -197,6 +201,7 @@ public class ImageIndexer {
 			averageLength += (title.length()+bodytext.length()+keywords.length()); // need some change
 			document.add(titleField);
 			document.add(urlField);
+			document.add(imgField);
 			document.add(idField);
 			document.add(prField);
 			document.add(bodytextField);

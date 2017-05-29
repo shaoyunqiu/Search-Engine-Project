@@ -123,13 +123,34 @@ public class HtmlContent {
 		return keywords ;
 	}
 	
+	public String getimgurl() {
+		String img = "" ;
+		//boolean flag = false ;
+		Elements aes = doc.select("article") ;
+		if(aes.size() == 0) return img ;
+		Element ae = aes.first() ;
+		Elements ies = ae.select("img") ;
+		if(ies.size() == 0) return img ;
+		for(Element e:ies){
+			String src = e.attr("src") ;
+			if (src != null && src.length() > 0){
+				//flag = true ;
+				img = UrlNorm.urlNormalize(src) ;
+				break ;
+			}
+		}
+		return img ;
+	}
+	
 	/*public static void main(String[] argv) {
-		HtmlContent test = new HtmlContent("../data/html/10.html") ;
+		HtmlContent test = new HtmlContent("../data/html/29525.html") ;
 		if(test.createDoc()){
 			String key = test.getKeywords() ;
 			String content = test.getContent() ;
+			String imgString = test.getimgurl() ;
 			System.out.println("key is: " + key);
 			System.out.println("content is " + content);
+			System.out.println("imgurl is " + imgString);
 		}
 		else {
 			System.out.println("can't open html");
