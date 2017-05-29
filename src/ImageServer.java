@@ -55,7 +55,7 @@ public class ImageServer extends HttpServlet{
 		if (operationString != null && operationString.indexOf("replace") > -1 && replaceString != null) {
 			int replaceNo=Integer.parseInt(replaceString);
 			int page=Integer.parseInt(pageString);
-			TopDocs results=search.searchQuery(queryString, "title", 100);
+			TopDocs results=search.searchQuery(queryString, "title",similarityChoice, 100);
 			if (results != null) {
 				if(results.scoreDocs.length >= page * PAGE_RESULT + replaceNo) {
 					ArrayList<String> queryWords = search.splitQuery(queryString);
