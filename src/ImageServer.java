@@ -119,7 +119,7 @@ public class ImageServer extends HttpServlet{
 				System.out.println(queryString);
 				System.out.println(URLDecoder.decode(queryString,"utf-8"));
 				System.out.println(URLDecoder.decode(queryString,"gb2312"));
-				System.out.println("Similarity: " + similarityString);
+				System.out.println("Similarity: " + similarityChoice);
 				String[] titles=null;
 				String[] urls=null;
 				String[] contents=null;
@@ -137,7 +137,7 @@ public class ImageServer extends HttpServlet{
 							Document doc = search.getDoc(hits[i].doc);
 							System.out.println("doc=" + doc.get("id") + " score="
 									+ hits[i].score + " url= "
-									+ doc.get("url")+ " content= "+doc.get("content"));
+									+ doc.get("url")+ " imgUrl= "+(doc.get("imgurl").length())+" title= "+doc.get("title"));
 							titles[i] = doc.get("title");
 							urls[i] = doc.get("url");
 							contents[i] = doc.get("content");

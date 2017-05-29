@@ -73,9 +73,6 @@ $().ready(function() {
 		$(this).css("line-height", curRow.css("height"));
 		//alert(curRow.css("height"));
 	});
-	$(".res-img").each(function() {
-		$(this).css("height", $(this).next().css("height") - 1);
-	});
 	$( ".nav label" ).hover(//绑定了鼠标进入和鼠标移开的两个参数  
 	  function() {  
 	  	var curRow = $(this).parent().prev();
@@ -84,7 +81,11 @@ $().ready(function() {
 	  	var curRow = $(this).parent().prev();
 	  	curRow.css("background-color","#FFF"); 
 	  }
-	);  
+	); 
+	$(".res-img").each(function() {
+		$(this).css("height", $(this).next().css("height"));
+		//alert($(this).parent().parent().parent().html());
+	}); 
 	
 	$( ".search_suggest" ).each(function() {
 		$(this).css("width", $(this).prev().prev().css("width"));
@@ -455,8 +456,8 @@ function DisplayNewDoc(obj) {
 		 		for(int i=0;i<titles.length;i++){
 		 			// 是否显示图片结果
 		 			boolean imageDisplay = false;
-		 			//if(imgUrls[i].trim() != "") 
-		 				//imageDisplay = true;
+		 			if(imgUrls[i].length() != 0) 
+		 				imageDisplay = true;
 		 			// 是否显示扩展链接
 		 			boolean extendLinkDisplay = false;
 		 			// 按查询分词分割title
@@ -557,8 +558,7 @@ function DisplayNewDoc(obj) {
 					 		<% if(imageDisplay) {%>
 					 		<div class="row" style="font-size:0px;">
 			
-					 			<img  class="col-xs-3 res-img"  
-					 			      src="<%=imgUrls[i] %>" />
+					 			<img  class="col-xs-3 res-img" style="height:96px;" src="<%=imgUrls[i] %>" />
 					 		
 					 			<div class="col-xs-9" >
 					 		<%}; %>
