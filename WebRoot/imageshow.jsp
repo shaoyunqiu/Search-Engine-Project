@@ -443,6 +443,7 @@ function DisplayNewDoc(obj) {
 		 	String[] titles=(String[]) request.getAttribute("titles");
 		 	String[] urls=(String[]) request.getAttribute("urls");
 		 	String[] contents=(String[]) request.getAttribute("contents");
+		 	String[] imgUrls=(String[]) request.getAttribute("imgUrls");
 		 	int hits=(Integer) request.getAttribute("totalNum");
 		 	ArrayList<String> queryWords = (ArrayList<String>) request.getAttribute("queryWords");
 		%>
@@ -454,6 +455,8 @@ function DisplayNewDoc(obj) {
 		 		for(int i=0;i<titles.length;i++){
 		 			// 是否显示图片结果
 		 			boolean imageDisplay = false;
+		 			//if(imgUrls[i].trim() != "") 
+		 				//imageDisplay = true;
 		 			// 是否显示扩展链接
 		 			boolean extendLinkDisplay = false;
 		 			// 按查询分词分割title
@@ -555,7 +558,7 @@ function DisplayNewDoc(obj) {
 					 		<div class="row" style="font-size:0px;">
 			
 					 			<img  class="col-xs-3 res-img"  
-					 			      src="http://news.tsinghua.edu.cn/publish/thunews/9659/20170527105113586692524/1495853645052.jpg" />
+					 			      src="<%=imgUrls[i] %>" />
 					 		
 					 			<div class="col-xs-9" >
 					 		<%}; %>

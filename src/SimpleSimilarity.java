@@ -17,7 +17,7 @@ public class SimpleSimilarity extends Similarity {
 
 	@Override
 	public float queryNorm(float sumOfSquaredWeights) {
-		return 1.0f;
+		return (float) (1.0/Math.sqrt(sumOfSquaredWeights)) ;
 	}
 
 	@Override
@@ -27,7 +27,8 @@ public class SimpleSimilarity extends Similarity {
 
 	@Override
 	public float sloppyFreq(int distance) {
-		return 1.0f;
+		//return (float) 1.0/distance ;
+		return 1.0f ;
 	}
 
 	@Override
@@ -39,7 +40,8 @@ public class SimpleSimilarity extends Similarity {
 
 	@Override
 	public float coord(int overlap, int maxOverlap) {
-		return 1.0f;
+		//return ((float) overlap)/maxOverlap ;
+		return 1.0f ;
 	}
 
 	// Default true

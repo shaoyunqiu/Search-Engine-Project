@@ -50,12 +50,13 @@ public class ImageServer extends HttpServlet{
 		String operationString=request.getParameter("operation");
 		String replaceString=request.getParameter("replaceNo");
 		String similarityString=(request.getParameter("similarity") == null ? "default" : request.getParameter("similarity"));
+		String imgUrlString=request.getParameter("imgurl");
 		int similarityChoice = (similarityString.indexOf("simple") >= 0 ? 0 : 1);
 		// replace a news item
 		if (operationString != null && operationString.indexOf("replace") > -1 && replaceString != null) {
 			int replaceNo=Integer.parseInt(replaceString);
 			int page=Integer.parseInt(pageString);
-			TopDocs results=search.searchQuery(queryString, "title", 100);
+			TopDocs results=search.searchQuery(queryString, "title",similarityChoice, 100);
 			if (results != null) {
 				if(results.scoreDocs.length >= page * PAGE_RESULT + replaceNo) {
 					ArrayList<String> queryWords = search.splitQuery(queryString);
@@ -122,7 +123,8 @@ public class ImageServer extends HttpServlet{
 				String[] titles=null;
 				String[] urls=null;
 				String[] contents=null;
-				TopDocs results=search.searchQuery(queryString, "title", 100);
+				String[] imgUrls=null;
+				TopDocs results=search.searchQuery(queryString, "title", similarityChoice ,100);
 				ArrayList<String> queryWords = search.splitQuery(queryString);
 				if (results != null) {
 					ScoreDoc[] hits = showList(results.scoreDocs, page);
@@ -130,14 +132,16 @@ public class ImageServer extends HttpServlet{
 						titles = new String[hits.length];
 						urls = new String[hits.length];
 						contents = new String[hits.length];
+						imgUrls = new String[hits.length];
 						for (int i = 0; i < hits.length && i < PAGE_RESULT; i++) {
 							Document doc = search.getDoc(hits[i].doc);
-							System.out.println("doc=" + hits[i].doc + " score="
+							System.out.println("doc=" + doc.get("id") + " score="
 									+ hits[i].score + " url= "
-									+ doc.get("url")+ " title= "+doc.get("title"));
+									+ doc.get("url")+ " content= "+doc.get("content"));
 							titles[i] = doc.get("title");
 							urls[i] = doc.get("url");
 							contents[i] = doc.get("content");
+							imgUrls[i]= doc.get("imgurl"); 
 						}
 	
 					} else {
@@ -154,6 +158,7 @@ public class ImageServer extends HttpServlet{
 				request.setAttribute("urls", urls);
 				request.setAttribute("contents", contents);
 				request.setAttribute("totalNum", Num);
+				request.setAttribute("imgUrls", imgUrls);
 				request.getRequestDispatcher("/imageshow.jsp").forward(request,
 						response);
 			}
