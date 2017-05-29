@@ -49,6 +49,8 @@ public class ImageServer extends HttpServlet{
 		String pageString=request.getParameter("page");
 		String operationString=request.getParameter("operation");
 		String replaceString=request.getParameter("replaceNo");
+		String similarityString=(request.getParameter("similarity") == null ? "default" : request.getParameter("similarity"));
+		int similarityChoice = (similarityString.indexOf("simple") >= 0 ? 0 : 1);
 		if (operationString != null && replaceString != null) {
 			int replaceNo=Integer.parseInt(replaceString);
 			int page=Integer.parseInt(pageString);
@@ -91,6 +93,7 @@ public class ImageServer extends HttpServlet{
 				System.out.println(queryString);
 				System.out.println(URLDecoder.decode(queryString,"utf-8"));
 				System.out.println(URLDecoder.decode(queryString,"gb2312"));
+				System.out.println("Similarity: " + similarityString);
 				String[] titles=null;
 				String[] urls=null;
 				String[] contents=null;

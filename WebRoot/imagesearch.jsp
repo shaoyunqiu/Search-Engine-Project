@@ -66,7 +66,7 @@ System.out.println(basePath);
 <div id="top-nav" class="navbar navbar-default navbar-static-top affix">
     <div class="container-fluid">
         <div class="nav navbar-nav navbar-left hidden-xs">
-            <a class="fake-link-scroll navbar-brand">“清新”搜索</a>
+            <a class="fake-link-scroll navbar-brand">“清新”搜索&nbsp;&nbsp;&nbsp;一见倾心</a>
             <a class="navbar-brand">&gt;</a>
             <a class="fake-link-scroll navbar-brand">清华大学新闻搜索平台</a>
         </div>

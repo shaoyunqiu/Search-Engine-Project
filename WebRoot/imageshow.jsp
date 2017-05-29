@@ -69,6 +69,9 @@ $().ready(function() {
 		$(this).css("line-height", curRow.css("height"));
 		//alert(curRow.css("height"));
 	});
+	$(".res-img").each(function() {
+		$(this).css("height", $(this).next().css("height") - 1);
+	});
 	$( ".nav label" ).hover(//绑定了鼠标进入和鼠标移开的两个参数  
 	  function() {  
 	  	var curRow = $(this).parent().prev();
@@ -249,9 +252,14 @@ function DisplayNewDoc(obj) {
 <div id="top-nav" class="navbar navbar-default navbar-static-top affix">
     <div class="container-fluid">
         <div class="nav navbar-nav navbar-left hidden-xs">
-            <a class="fake-link-scroll navbar-brand">“清新”搜索</a>
+            <a class="fake-link-scroll navbar-brand">“清新”搜索&nbsp;&nbsp;&nbsp;一见倾心</a>
             <a class="navbar-brand">&gt;</a>
-            <a class="navbar-brand" href="<%=path %>/imagesearch.jsp">回到主页</a>
+            <a class="fake-link-scroll navbar-brand">清华大学新闻搜索平台</a>
+        </div>
+        <div class="nav navbar-nav navbar-right hidden-xs">
+            <a class="navbar-brand" href="<%=path %>/imagesearch.jsp">
+            	<i class="fa fa-reply"></i>&nbsp;&nbsp;回到主页
+            </a>
         </div>
     </div>
     <!-- /container -->
@@ -271,6 +279,9 @@ function DisplayNewDoc(obj) {
 				<button type="submit" class="btn btn-info" style="width:100%;font-size:15px">搜索</button>
 				</label>
 				</div>
+				<label><input type="radio" name="similarity" value="default"/>&nbsp;VSM模型&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<label><input type="radio" name="similarity" value="simple"/>&nbsp;BM25模型</label>
+				&nbsp;&nbsp;&nbsp;&nbsp;（不选择情况下默认为VSM模型）
 			</form>
 		</div>
 		<br>
@@ -288,6 +299,10 @@ function DisplayNewDoc(obj) {
 		 <% 
 		 	if(titles!=null && titles.length>0){
 		 		for(int i=0;i<titles.length;i++){
+		 			// 是否显示图片结果
+		 			boolean imageDisplay = false;
+		 			// 是否显示扩展链接
+		 			boolean extendLinkDisplay = true;
 		 			// 按查询分词分割title
 		 			String temp = titles[i];
 		 			ArrayList<String> s = new ArrayList<String>();
@@ -383,33 +398,74 @@ function DisplayNewDoc(obj) {
 					  			</p>
 					  				
 					 		</a>
+					 		<% if(imageDisplay) {%>
+					 		<div class="row" style="font-size:0px;">
+			
+					 			<img  class="col-xs-3 res-img"  
+					 			      src="http://news.tsinghua.edu.cn/publish/thunews/9659/20170527105113586692524/1495853645052.jpg" />
 					 		
-					 		<p style="font-size:0px;">
-					 			<%
-					 			for(int j = 0; j < lengthContent; j ++) {
-					  				boolean findFlag = false;
-					  				for(int k = 0; k < queryWords.size(); k ++) {
-						  				if(splitContent.get(j).indexOf(queryWords.get(k)) > -1) {
-						  					findFlag = true;%>
-						  					<span style="color:red;font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim()%></span>
-						  			 <% 	break;    
-						  			    }
-						  			};
-						  			if(!findFlag) {%>
-					  					<span style="font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim() %></span>
-					  			<%  };
-					  			};%>
-				  				<br>
-				  				<a class="fake-link" href="<%=urls[i]%>" target="_blank" >
-					  				<span style="color:#00A000;font-size:13px;padding-top:10px;"><%=urlDisplay %></span>
-					  			</a>
-				  			</p>
-				  			
+					 			<div class="col-xs-9" >
+					 		<%}; %>
+						 		<p style="font-size:0px;">
+						 			<%
+						 			for(int j = 0; j < lengthContent; j ++) {
+						  				boolean findFlag = false;
+						  				for(int k = 0; k < queryWords.size(); k ++) {
+							  				if(splitContent.get(j).indexOf(queryWords.get(k)) > -1) {
+							  					findFlag = true;%>
+							  					<span style="color:red;font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim()%></span>
+							  			 <% 	break;    
+							  			    }
+							  			};
+							  			if(!findFlag) {%>
+						  					<span style="font-size:12px;letter-spacing:1px;"><%=splitContent.get(j).trim() %></span>
+						  			<%  };
+						  			};%>
+					  				<br>
+					  				<a class="fake-link" href="<%=urls[i]%>" target="_blank" >
+						  				<span style="color:#00A000;font-size:13px;padding-top:10px;"><%=urlDisplay %></span>
+						  			</a>
+					  			</p>
+					  		<% if(imageDisplay) {%>
+					  			</div>
+				  			</div>
+				  			<%}; %>
 				 	</div>
 				 	<div onclick=sendRequest(this) class="col-xs-2 nav">
 				 		<label style="width:110px;">&#x203a;</label>
 				 	</div>
 			 	</div>
+			 	<% if(extendLinkDisplay) { %>
+			 	<div class="row" style="font-size:0px">
+			 		<div class="col-xs-7">
+			 			<div class="row" style="font-size:0px">
+			 			<div class="col-xs-1"></div>
+			 			<div class="col-xs-4">
+			 				<span style="color:#0000B0;font-size:18px;">综合新闻</span><br>
+			 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
+			 			</div>
+			 			<div class="col-xs-1"></div>
+			 			<div class="col-xs-4">
+			 				<span style="color:#0000B0;font-size:18px;">网站地图</span><br>
+			 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
+			 			</div>
+			 			</div>
+			 			
+			 			<div class="row" style="font-size:0px; margin-top:10px;">
+			 			<div class="col-xs-1"></div>
+			 			<div class="col-xs-4">
+			 				<span style="color:#0000B0;font-size:18px;">要闻聚焦</span><br>
+			 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
+			 			</div>
+			 			<div class="col-xs-1"></div>
+			 			<div class="col-xs-4">
+			 				<span style="color:#0000B0;font-size:18px;">关于我们</span><br>
+			 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
+			 			</div>
+			 			</div>
+			 		</div>
+			 	</div>
+			 	<% };%>
 			 	<div class="row" style="font-size:0px">
 			 		<div class="col-xs-7">
 			 			<hr style="margin-bottom:10px;">
