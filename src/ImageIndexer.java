@@ -25,6 +25,7 @@ public class ImageIndexer {
     private IndexWriter indexWriter;
     private float averageLength=1.0f;
     private int fileNum = 0;
+    Hashtable<String, Boolean> map = new Hashtable<String, Boolean>();
     private Map<Integer, Double> PRMap ;
     
     public ImageIndexer(String indexDir){
@@ -166,6 +167,10 @@ public class ImageIndexer {
 				}	
 				pr = PRMap.get(new Integer(id)) ;
 			}
+      if(map.get(title) == null) {
+    		map.put(title, true);
+       }
+      else return ;
     		Document document  =   new  Document();
     		
     		float pr2square = (float) Math.sqrt(pr) ; 
@@ -264,6 +269,5 @@ public class ImageIndexer {
 		String path2 = "../data/pdf/" ;
         indexer.traverseIndex(path1, path2);
         indexer.saveGlobals("forIndex/global.txt");
-        
 	}
 }

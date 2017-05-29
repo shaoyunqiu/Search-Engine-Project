@@ -58,7 +58,180 @@ System.out.println(basePath);
 		 width:50%;
 		 height: 45%;
 	}
+	.search_suggest{ z-index:999; border:1px solid #999999; margin-top:-5px;padding-top:5px;height:auto;display:none;}  
+	.search_suggest li{height:24px; overflow:hidden; padding-left:10px; line-height:24px; background:#FFFFFF; cursor:default;}  
+	.search_suggest li:hover{background:#DDDDDD;}  
+	.search_suggest li.hover{background:#DDDDDD;} 
 </style>
+
+<script>
+$().ready(function() {
+	$( ".search_suggest" ).each(function() {
+		$(this).css("width", $(this).prev().prev().css("width"));
+	});
+	
+	//实例化输入提示的JS,参数为进行查询操作时要调用的函数名  
+	var searchSuggest =  new oSearchSuggest(sendRequestforSim);
+	
+	$(document).mouseup(function(e){
+		var _con = $('#gov_search_suggest');   // 设置目标区域
+		if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+			$('#gov_search_suggest').hide();
+		}
+	});  
+	
+	//实现搜索输入框的输入提示js类  
+	function oSearchSuggest(searchFuc){  
+	    var input = $('#gover_search_key');  
+	    var suggestWrap = $('#gov_search_suggest');  
+	    var key = "";  
+	    var init = function(){  
+	        input.bind('keyup',sendKeyWord);  
+	        //suggestWrap.bind('blur',function(){setTimeout(hideSuggest,100);})  
+	    }  
+	    var hideSuggest = function(){  
+	        suggestWrap.hide();  
+	    }  
+	      
+	    //发送请求，根据关键字到后台查询  
+	    var sendKeyWord = function(event){  
+	        //键盘选择下拉项  
+	        if(event.keyCode == 38||event.keyCode == 40){  
+	            var current = suggestWrap.find('li.hover');  
+	            if(event.keyCode == 38){  
+	                if(current.length>0){  
+	                    var prevLi = current.removeClass('hover').prev();  
+	                    if(prevLi.length>0){  
+	                        prevLi.addClass('hover');  
+	                        input.val(prevLi.html());  
+	                    }  
+	                    else {
+	                    	var first = suggestWrap.find('li:last');  
+		                    first.addClass('hover');  
+		                    input.val(first.html()); 
+	                    }
+	                }else{  
+	                    var last = suggestWrap.find('li:last');  
+	                    last.addClass('hover');  
+	                    input.val(last.html());  
+	                }  
+	                  
+	            }else if(event.keyCode == 40){  
+	                if(current.length>0){  
+	                    var nextLi = current.removeClass('hover').next();  
+	                    if(nextLi.length>0){  
+	                        nextLi.addClass('hover');  
+	                        input.val(nextLi.html());  
+	                    }  
+	                    else {
+	                    	var first = suggestWrap.find('li:first');  
+		                    first.addClass('hover');  
+		                    input.val(first.html()); 
+	                    }
+	                }else{  
+	                    var first = suggestWrap.find('li:first');  
+	                    first.addClass('hover');  
+	                    input.val(first.html());  
+	                }  
+	            }  
+	              
+	        //输入字符  
+	        }else{   
+	            var valText = $.trim(input.val());  
+	            if(valText ==''||valText==key){  
+	                return;  
+	            }  
+	            searchFuc(valText);  
+	            key = valText;  
+	        }             
+	          
+	    }  
+	    //请求返回后，执行数据展示  
+	    this.dataDisplay = function(data){ 
+	        if(data.length<=0){  
+	            suggestWrap.hide();  
+	            return;  
+	        }  
+	        
+	        //往搜索框下拉建议显示栏中添加条目并显示  
+	        var li;  
+	        var tmpFrag = document.createDocumentFragment();  
+	        suggestWrap.find('ul').html('');  
+	        for(var i=0; i<data.length; i++){  
+	            li = document.createElement('LI');  
+	            li.innerHTML = data[i];  
+	            tmpFrag.appendChild(li);  
+	        }  
+	        suggestWrap.find('ul').append(tmpFrag);  
+	        suggestWrap.show();  
+	          
+	        //为下拉选项绑定鼠标事件  
+	        suggestWrap.find('li').hover(function(){  
+	                suggestWrap.find('li').removeClass('hover');  
+	                $(this).addClass('hover');  
+	          
+	            },function(){  
+	                $(this).removeClass('hover');  
+	        });
+	        suggestWrap.find('li').each(function() {
+	        	$(this).bind('click',function(){ 
+		            input.val($(this).html());  
+		            suggestWrap.hide();  
+		        });  
+	        });
+	    }  
+	    init();  
+	};  
+	
+	var XMLHttpReq;  
+	//创建XMLHttpRequest对象         
+	function createXMLHttpRequest() {  
+	    if(window.XMLHttpRequest) { //Mozilla 浏览器  
+	        XMLHttpReq = new XMLHttpRequest();  
+	    }  
+	    else if (window.ActiveXObject) { // IE浏览器  
+	        try {  
+	            XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");  
+	        } catch (e) {  
+	            try {  
+	                XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");  
+	            } catch (e) {}  
+	        }  
+	    }  
+	}  
+	//发送请求函数  
+	function sendRequestforSim(query) {  
+	    createXMLHttpRequest();  
+	    var requrl = "servlet/ImageServer?operation=simQuery&query=" + query; 
+	    XMLHttpReq.open("GET", requrl, true);  
+	    XMLHttpReq.onreadystatechange = function(){processResponse();};//指定响应函数  
+	    XMLHttpReq.send(null);  // 发送请求  
+	}  
+	// 处理返回信息函数  
+	function processResponse() {
+	    if (XMLHttpReq.readyState == 4) { // 判断对象状态  
+	        if (XMLHttpReq.status == 200) { // 信息已经成功返回，开始处理信息   
+	            addSimQuery();  
+	        } else { //页面不正常  
+	            window.alert("Servlet Error.");  
+	        }  
+	    }  
+	}  
+	
+	function addSimQuery() {
+		var simQueryNum = XMLHttpReq.responseXML.getElementsByTagName("simQuery").length;
+		var simQuery = new Array(simQueryNum);
+	    for (var i = 0; i < simQueryNum; i ++) {
+	    	var queryWord = XMLHttpReq.responseXML.getElementsByTagName("simQuery")[i].firstChild.nodeValue;
+	    	simQuery[i] = queryWord;
+	    } 
+	    searchSuggest.dataDisplay(simQuery);  
+	}
+});
+
+  
+
+</script>
 
 </head>
 <body>
@@ -66,7 +239,7 @@ System.out.println(basePath);
 <div id="top-nav" class="navbar navbar-default navbar-static-top affix">
     <div class="container-fluid">
         <div class="nav navbar-nav navbar-left hidden-xs">
-            <a class="fake-link-scroll navbar-brand">“清新”搜索</a>
+            <a class="fake-link-scroll navbar-brand">“清新”搜索&nbsp;&nbsp;&nbsp;一见倾心</a>
             <a class="navbar-brand">&gt;</a>
             <a class="fake-link-scroll navbar-brand">清华大学新闻搜索平台</a>
         </div>
@@ -86,11 +259,15 @@ System.out.println(basePath);
 	    </div>
 		<form class="form" name="form1" method="get" action="servlet/ImageServer" style="width:100%">
 			<label style="width:80%;vertical-align:middle">
-			<input class="form-control" name="query" type="text" style="width:100%; height:40px;vertical-align:middle;"/>
+			<input class="form-control input_search_key" id="gover_search_key" name="query" type="text" style="width:100%; height:40px;vertical-align:middle;"/>
 			</label>
 			<label style="width:15%;vertical-align:middle">
 			<button type="submit" class="btn btn-info" style="width:100%;font-size:15px;">搜索</button>
 			</label>
+			<div class="search_suggest" id="gov_search_suggest">  
+                <ul> 
+                </ul>  
+            </div>
 		</form>
 	</div>
 	<div class="container-fluid main">
@@ -99,6 +276,6 @@ System.out.println(basePath);
 </div>
 <!-- /Main -->
 
-<footer class="text-center">Image Searcher&nbsp; @copyright 2017  shaoyunqiu THUwangcy </footer>
+<footer class="text-center">TsingNews Search&nbsp; @copyright 2017  shaoyunqiu THUwangcy </footer>
 </body>
 </html>
