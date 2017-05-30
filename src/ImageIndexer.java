@@ -132,6 +132,9 @@ public class ImageIndexer {
 				title = jsonDealer.title ;
 				id = jsonDealer.id ;
 				url = UrlNorm.urlNormalize(jsonDealer.url) ;
+				if(url == "http://news.tsinghua.edu.cn/publish/thunews/index.html") {
+					System.out.println(id);
+				}
 			}
 			else {
 				System.out.println("file is not exist, continue " + filename);
@@ -178,8 +181,8 @@ public class ImageIndexer {
     		
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);
 			titleField.setBoost(60.0f);
-			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NO);
-			//urlField.setBoost(100.0f);
+			Field urlField  =   new  Field( "url" ,url,Field.Store.YES, Field.Index.NOT_ANALYZED);
+			urlField.setBoost(100.0f);
 			Field imgField = new Field("imgurl", imgurl, Field.Store.YES, Field.Index.NO) ;
 			Field idField = new Field("id", Integer.toString(id), Field.Store.YES, Field.Index.NO) ;
 			Field prField = new Field("pagerank", pr.toString(), Field.Store.YES, Field.Index.NO) ;

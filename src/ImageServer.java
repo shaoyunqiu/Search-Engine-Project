@@ -22,10 +22,12 @@ public class ImageServer extends HttpServlet{
 	public static final String indexDir="forIndex";
 	public static final String picDir="";
 	private ImageSearcher search=null;
+	private VerticalIndexs viIndexs ;
 	public ImageServer(){
 		super();
 		search=new ImageSearcher(new String(indexDir+"/index"));
 		search.loadGlobals(new String(indexDir+"/global.txt"));
+		viIndexs = new VerticalIndexs() ;
 	}
 	
 	public ScoreDoc[] showList(ScoreDoc[] results,int page){
