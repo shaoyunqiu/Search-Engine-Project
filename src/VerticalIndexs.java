@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class VerticalIndexs {
 	public String[][] childcontent ;
 	public int sum ;
 	
-	public VerticalIndexs() {
+	public VerticalIndexs(String indexPath) {
 		// TODO Auto-generated constructor stub
 		idMap = new HashMap<Integer, Integer>() ;
 		self_url = new ArrayList<String>() ;
@@ -26,10 +28,10 @@ public class VerticalIndexs {
 		content = new ArrayList<String>() ;
 		choices = new int[13][4] ;
 		sum = 13 ;
-		File file= new File("../indexs/record.txt") ;
+		File file= new File(indexPath + "/record.txt") ;
 		int cnt = -1 ;
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)) ;
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8")) ;
 			String lineString = null ;
 			while((lineString = bufferedReader.readLine()) != null){
 				String[] after = lineString.split(" ") ;
@@ -54,13 +56,13 @@ public class VerticalIndexs {
 			choices[i][2] = (i+1) % sum ;
 			choices[i][3] = (i+2) % sum ;
 		}
-		file = new File("../indexs/child1.txt") ;
+		file = new File(indexPath + "/child1.txt") ;
 		childurl = new String[2][4] ;
 		childtitle = new String[2][4] ;
 		childcontent = new String[2][4] ;
 		cnt = -1 ;
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)) ;
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8")) ;
 			String lineString = null ;
 			while((lineString = bufferedReader.readLine()) != null){
 				String[] after = lineString.split(" ") ;
@@ -77,10 +79,10 @@ public class VerticalIndexs {
 			// TODO: handle exception
 			System.out.println("open child1 failed");
 		}
-		file = new File("../indexs/child2.txt") ;
+		file = new File(indexPath + "/child2.txt") ;
 		cnt = -1 ;
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)) ;
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8")) ;
 			String lineString = null ;
 			while((lineString = bufferedReader.readLine()) != null){
 				String[] after = lineString.split(" ") ;
@@ -99,7 +101,7 @@ public class VerticalIndexs {
 		}
 	}
 	
-	public boolean hasVerticla(Integer docid){
+	public boolean hasVerticla(Integer docid) {
 		if(idMap.containsKey(docid)) return true ;
 		else {
 			return false ;
@@ -134,34 +136,34 @@ public class VerticalIndexs {
 		return res ;
 	}
 	
-	/*public static void main(String[] argv) {
-		VerticalIndexs vi = new VerticalIndexs() ;
-		if(vi.hasVerticla(26168)){
-			String[][] v = vi.getVertical(26168) ;
-			for(int i = 0 ; i < 4 ; i ++){
-				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
-			}
-		}else {
-			System.out.println("26168 has no vertical res");
-		}
-		
-		if(vi.hasVerticla(28443)){
-			String[][] v = vi.getVertical(28443) ;
-			for(int i = 0 ; i < 4 ; i ++){
-				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
-			}
-		}else {
-			System.out.println("28443 has no vertical res");
-		}
-		
-		if(vi.hasVerticla(100)){
-			String[][] v = vi.getVertical(26168) ;
-			for(int i = 0 ; i < 4 ; i ++){
-				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
-			}
-		}else {
-			System.out.println("100 has no vertical res");
-		}
-	}*/
+//	public static void main(String[] argv) {
+//		VerticalIndexs vi = new VerticalIndexs() ;
+//		if(vi.hasVerticla(26168)){
+//			String[][] v = vi.getVertical(26168) ;
+//			for(int i = 0 ; i < 4 ; i ++){
+//				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
+//			}
+//		}else {
+//			System.out.println("26168 has no vertical res");
+//		}
+//		System.out.println("");
+//		if(vi.hasVerticla(18654)){
+//			String[][] v = vi.getVertical(18654) ;
+//			for(int i = 0 ; i < 4 ; i ++){
+//				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
+//			}
+//		}else {
+//			System.out.println("28443 has no vertical res");
+//		}
+//		
+//		if(vi.hasVerticla(100)){
+//			String[][] v = vi.getVertical(26168) ;
+//			for(int i = 0 ; i < 4 ; i ++){
+//				System.out.println(v[0][i] + "\t" + v[1][i] + "\t" + v[2][i]);
+//			}
+//		}else {
+//			System.out.println("100 has no vertical res");
+//		}
+//	}
 }
 
