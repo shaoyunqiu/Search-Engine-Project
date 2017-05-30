@@ -1,7 +1,7 @@
 # Search-Engine-Project
 ## 打分规则
-1. 目前初步的打分的规则为：
-2. pageRank, 将pageRank的权重作为每个document的权重，在建立索引时设立。此处暂时对PageRank值开更号，以减少数量级的差值。
+1、目前初步的打分的规则为：
+2、pageRank, 将pageRank的权重作为每个document的权重，在建立索引时设立。此处暂时对PageRank值开更号，以减少数量级的差值。
 不同域的权重，改变field的setBoost, 可以实现对tf的加权，在建立filed的值设立。              
    目前field的内容如下：                 
     title - analyse, 60, 10                     
@@ -39,10 +39,10 @@
 
   加了搜索方式的选择，choice 为0， 为自定义的Similarity, 否则为系统自带的Similarity. 目前前端默认为0 。
 
-3. 垂直搜索相关
+3、垂直搜索相关
   加了图片域，选择article标签的第一个img,返回规范后之后的url, 否则返回空，不计入评分公式。
   
-4. 垂直搜索类调整
+4、垂直搜索类调整
   出现了路径问题和编码问题。编码上更改了VerticalIndexs打开文件的语句，使用UTF-8打开。
   路径上由于是在启动服务器时加载的，要放到和forIndex对等的位置，目前是在forIndex中新建了一个verticalIndex文件夹，把原来indexs里的文件放进去。
   
