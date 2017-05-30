@@ -445,8 +445,14 @@ function DisplayNewDoc(obj) {
 		 	String[] urls=(String[]) request.getAttribute("urls");
 		 	String[] contents=(String[]) request.getAttribute("contents");
 		 	String[] imgUrls=(String[]) request.getAttribute("imgUrls");
+		 	String[][] extendTitles=(String[][]) request.getAttribute("extendTitles");
+		 	String[][] extendUrls=(String[][]) request.getAttribute("extendUrls");
+		 	String[][] extendContents=(String[][]) request.getAttribute("extendContents");
+		 	boolean[] hasExtend=(boolean[]) request.getAttribute("hasExtend");
+		 	ArrayList<String> simQuery=(ArrayList<String>) request.getAttribute("simQuery");
 		 	int hits=(Integer) request.getAttribute("totalNum");
 		 	ArrayList<String> queryWords = (ArrayList<String>) request.getAttribute("queryWords");
+		 
 		%>
 		<div id="Layer2">
 		 <div id="imagediv">共搜索到<%=hits %>条新闻（最多展示100条）
@@ -460,6 +466,15 @@ function DisplayNewDoc(obj) {
 		 				imageDisplay = true;
 		 			// 是否显示扩展链接
 		 			boolean extendLinkDisplay = false;
+		 			if(hasExtend[i]) {
+		 				extendLinkDisplay = true;
+		 				for(int j = 0; j < 4; j ++) {
+		 					if(extendContents[i][j].length() > 29) {
+		 						extendContents[i][j] = extendContents[i][j].substring(0,29);
+		 						extendContents[i][j] += "...";
+		 					}
+		 				}
+		 			}
 		 			// 按查询分词分割title
 		 			String temp = titles[i];
 		 			ArrayList<String> s = new ArrayList<String>();
@@ -587,38 +602,30 @@ function DisplayNewDoc(obj) {
 				  			</div>
 				  			<%}; %>
 				  			<% if(extendLinkDisplay) { %>
-					 			<div class="row" style="font-size:0px">
-					 			<div class="col-xs-1"></div>
-					 			<div class="col-xs-4">
-					 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
-					 				<span style="color:#0000B0;font-size:18px;">综合新闻</span><br>
-					 				</a>
-					 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
-					 			</div>
-					 			<div class="col-xs-1"></div>
-					 			<div class="col-xs-4">
-					 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
-					 				<span style="color:#0000B0;font-size:18px;">网站地图</span><br>
-					 				</a>
-					 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
-					 			</div>
+					 			<div class="row" style="font-size:0px; margin-top:10px;">
+						 			<div class="col-xs-1"></div>
+						 			<%for(int j = 0; j < 2; j ++) { %>
+						 			<div class="col-xs-4">
+						 				<a class="fake-link" href="<%=extendUrls[i][j]%>" target="_blank">
+						 				<span style="color:#0000B0;font-size:18px;"><%=extendTitles[i][j]%></span><br>
+						 				</a>
+						 				<span style="font-size:12px;letter-spacing:1px;"><%=extendContents[i][j]%></span>
+						 			</div>
+						 			<div class="col-xs-1"></div>
+						 			<%}; %>
 					 			</div>
 					 			
 					 			<div class="row" style="font-size:0px; margin-top:10px;">
-					 			<div class="col-xs-1"></div>
-					 			<div class="col-xs-4">
-					 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
-					 				<span style="color:#0000B0;font-size:18px;">要闻聚焦</span><br>
-					 				</a>
-					 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
-					 			</div>
-					 			<div class="col-xs-1"></div>
-					 			<div class="col-xs-4">
-					 				<a class="fake-link" href="<%=urls[i]%>" target="_blank">
-					 				<span style="color:#0000B0;font-size:18px;">关于我们</span><br>
-					 				</a>
-					 				<span style="font-size:12px;letter-spacing:1px;">综合新闻综合新闻综合新闻综合新闻综合新闻</span>
-					 			</div>
+						 			<div class="col-xs-1"></div>
+						 			<%for(int j = 2; j < 4; j ++) { %>
+						 			<div class="col-xs-4">
+						 				<a class="fake-link" href="<%=extendUrls[i][j]%>" target="_blank">
+						 				<span style="color:#0000B0;font-size:18px;"><%=extendTitles[i][j]%></span><br>
+						 				</a>
+						 				<span style="font-size:12px;letter-spacing:1px;"><%=extendContents[i][j]%></span>
+						 			</div>
+						 			<div class="col-xs-1"></div>
+						 			<%}; %>
 					 			</div>
 						 	<% };%>
 				 	</div>
@@ -638,7 +645,30 @@ function DisplayNewDoc(obj) {
 		 		<strong style="font-size:40px;">没有找到相关新闻</strong>
 		 	<%}; %>
 		 </div>
-		 <%if(hits > 10) { 
+		 <div class="row">
+			 <div class="col-xs-7" >
+			 	<h4>相关搜索</h4>
+			 	<% for(int i = 0; i <= simQuery.size() / 3; i ++) {%>
+			 	<div class="row" style="margin-top:5px;">
+			 		<% for(int j = 0; j < 3 && i * 3 + j < simQuery.size(); j ++) {
+			 		   		String sim = simQuery.get(i * 3 + j);
+			 		   		if(sim.length() > 11) {
+			 		   			sim = sim.substring(0, 11);
+			 		   			sim += "...";
+			 		   		}%>
+			 		<div class="col-xs-4" >
+					 	<a class="fake-link" style="font-size:16px;color:#0000B0;"
+					 	 href="ImageServer?query=<%=sim%>">
+					 		<%=sim%>
+					 	</a>
+					</div>
+					<% }; %>
+				</div>
+				<% }; %>	  
+			 </div>
+		</div>
+		<br>
+		<%if(hits > 10) { 
 		   int maxPage = hits / 10 + (hits % 10 == 0 ? 0 : 1);%>
 		 <div class="pull-left" width="56%">
 		 	<ul class="pagination pull-right">

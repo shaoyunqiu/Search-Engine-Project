@@ -22,10 +22,12 @@ public class ImageServer extends HttpServlet{
 	public static final String indexDir="forIndex";
 	public static final String picDir="";
 	private ImageSearcher search=null;
+	private VerticalIndexs viIndex=null;
 	public ImageServer(){
 		super();
 		search=new ImageSearcher(new String(indexDir+"/index"));
 		search.loadGlobals(new String(indexDir+"/global.txt"));
+		viIndex = new VerticalIndexs(indexDir+"/verticalIndex");
 	}
 	
 	public ScoreDoc[] showList(ScoreDoc[] results,int page){
@@ -124,6 +126,19 @@ public class ImageServer extends HttpServlet{
 				String[] urls=null;
 				String[] contents=null;
 				String[] imgUrls=null;
+				String[][] extendTitles=null;
+				String[][] extendUrls=null;
+				String[][] extendContents=null;
+				boolean[] hasExtend=null;
+				ArrayList<String> simQuery = new ArrayList<String>();
+				// TODO: add similar query to this list
+				simQuery.add(queryString);
+				simQuery.add(queryString + "返回数据1");  
+				simQuery.add(queryString + "返回数据2");  
+				simQuery.add(queryString + "不是有的人天生吃素的");  
+				simQuery.add(queryString + "不是有的人天生吃素的");  
+				simQuery.add(queryString + "2012是真的");  
+				simQuery.add(queryString + "2012是假的"); 
 				TopDocs results=search.searchQuery(queryString, "title", similarityChoice ,100);
 				ArrayList<String> queryWords = search.splitQuery(queryString);
 				if (results != null) {
@@ -133,15 +148,29 @@ public class ImageServer extends HttpServlet{
 						urls = new String[hits.length];
 						contents = new String[hits.length];
 						imgUrls = new String[hits.length];
+						extendTitles = new String[hits.length][4];
+						extendUrls = new String[hits.length][4];
+						extendContents = new String[hits.length][4];
+						hasExtend = new boolean[hits.length];
 						for (int i = 0; i < hits.length && i < PAGE_RESULT; i++) {
 							Document doc = search.getDoc(hits[i].doc);
-							System.out.println("doc=" + doc.get("id") + " score="
+							System.out.println("doc=" + Integer.parseInt(doc.get("id")) + " score="
 									+ hits[i].score + " url= "
 									+ doc.get("url")+ " imgUrl= "+(doc.get("imgurl").length())+" title= "+doc.get("title"));
 							titles[i] = doc.get("title");
 							urls[i] = doc.get("url");
 							contents[i] = doc.get("content");
 							imgUrls[i]= doc.get("imgurl"); 
+							hasExtend[i] = false;
+							if(viIndex.hasVerticla(Integer.parseInt(doc.get("id")))) {
+								hasExtend[i] = true;
+								String[][] v = viIndex.getVertical(Integer.parseInt(doc.get("id"))) ;
+								for(int j = 0 ; j < 4 ; j ++){
+									extendTitles[i][j] = v[0][j];
+									extendUrls[i][j] = v[1][j];
+									extendContents[i][j] = v[2][j];
+								}
+							}
 						}
 	
 					} else {
@@ -159,6 +188,11 @@ public class ImageServer extends HttpServlet{
 				request.setAttribute("contents", contents);
 				request.setAttribute("totalNum", Num);
 				request.setAttribute("imgUrls", imgUrls);
+				request.setAttribute("simQuery", simQuery);
+				request.setAttribute("extendTitles", extendTitles);
+				request.setAttribute("extendUrls", extendUrls);
+				request.setAttribute("extendContents", extendContents);
+				request.setAttribute("hasExtend", hasExtend);
 				request.getRequestDispatcher("/imageshow.jsp").forward(request,
 						response);
 			}
