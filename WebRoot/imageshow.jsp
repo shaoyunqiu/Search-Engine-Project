@@ -13,6 +13,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>TsingNews Search</title>
 <!-- stylesheets -->
+<link rel="shortcut icon" href="<%=path %>/static/active.png" type="image/x-icon" />
 <link href="<%=path %>/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=path %>/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link href="<%=path %>/static/base/css/fonts.min.css" rel="stylesheet">
@@ -282,7 +283,7 @@ function createXMLHttpRequest() {
 function sendRequest(obj) {  
     createXMLHttpRequest();  
     var queryString = $("#queryString").html();
-    var page = $("li.active a").html();
+    var page = $("li a.active span").html();
     var requrl = "ImageServer?operation=replace&query=" + queryString + "&page=" + page + "&replaceNo=" + replaceNo; 
     XMLHttpReq.open("GET", requrl, true);  
     XMLHttpReq.onreadystatechange = function(){processResponse(obj);};//指定响应函数  
