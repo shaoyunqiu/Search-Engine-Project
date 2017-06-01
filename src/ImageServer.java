@@ -90,8 +90,11 @@ public class ImageServer extends HttpServlet{
 		}
 		// request similar query 
 		else if (operationString != null && operationString.indexOf("simQuery") > -1) {
-			System.out.println("SimQuery " + queryString);
+			// System.out.println("SimQuery " + queryString);
 			ArrayList<String> simQuery = simSearcher.Search(queryString, MAX_SIM_NUM);
+//			for(int i = 0; i < simQuery.size(); i ++)
+//				System.out.print(simQuery.get(i) + " ");
+//			System.out.println("");
 			// TODO: add similar query to this list
 			// simQuery.add(queryString);
 			// simQuery.add(queryString + "返回数据1");  

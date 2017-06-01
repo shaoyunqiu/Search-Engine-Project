@@ -174,7 +174,7 @@ public class Trie {
 		} // maxdepth 2 layer
 	}
 	
-	public static void main(String[] argv) {
+	/*public static void main(String[] argv) {
 		String path = "forIndex/titles/alltitles.txt" ;
 		//String path = "../Test/alltitles.txt" ;
 		Trie test = new Trie(path) ;
@@ -192,5 +192,5 @@ public class Trie {
 		}
 		//long endtime = System.currentTimeMillis() ;
 		//System.out.println("exe time is " + (endtime-startime));
-	}
+	}*/
 }

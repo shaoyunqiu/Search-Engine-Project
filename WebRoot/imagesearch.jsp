@@ -178,7 +178,9 @@ $().ready(function() {
 	        	$(this).bind('click',function(){ 
 		            input.val($(this).html());  
 		            suggestWrap.hide();  
+		            $(".form").submit();
 		        });  
+		        
 	        });
 	    }  
 	    init();  
@@ -260,7 +262,7 @@ $().ready(function() {
 	    </div>
 		<form class="form" name="form1" method="get" action="servlet/ImageServer" style="width:100%">
 			<label style="width:80%;vertical-align:middle">
-			<input class="form-control input_search_key" id="gover_search_key" name="query" type="text" style="width:100%; height:40px;vertical-align:middle;"/>
+			<input autocomplete="off" class="form-control input_search_key" id="gover_search_key" name="query" type="text" style="width:100%; height:40px;vertical-align:middle;"/>
 			</label>
 			<label style="width:15%;vertical-align:middle">
 			<button type="submit" class="btn btn-info" style="width:100%;font-size:15px;">搜索</button>
