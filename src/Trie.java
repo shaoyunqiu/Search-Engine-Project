@@ -3,7 +3,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 
 public class Trie {
@@ -78,8 +80,8 @@ public class Trie {
 			return defaultstr ;
 		}
 		TrieNode node = SearchPreNode(target) ;
-		Boolean flag = true ;
-		AddStrB(node, s, res, maxnum);
+		//Boolean flag = true ;
+		AddBFS(node, s, res, maxnum);
 		return res ;
 	}
 	
@@ -127,6 +129,32 @@ public class Trie {
 		}
 	}
 	
+	private void AddBFS(TrieNode node, String preString, ArrayList<String> res, int maxnum) {
+		Queue<TrieNode> queue = new LinkedList<TrieNode>() ;
+		Queue<String> sq = new LinkedList<String>() ;
+		queue.add(node) ;
+		sq.add(preString) ;
+		int cnt = 0 ;
+		while(cnt < maxnum && !queue.isEmpty()){
+			TrieNode tmp = queue.poll() ;
+			String nowString = sq.poll() ;
+			//System.out.println(nowString + " " + queue.size() + " " + sq.size());
+			//System.out.println(tmp.wordnum);
+			if(tmp.wordnum > 0){
+				//System.out.println(tmp.wordnum + nowString);
+				res.add(nowString) ;
+				++ cnt ;
+				if(cnt >= maxnum) break ;
+			}
+			if(tmp.child.size() == 0) continue ;
+			for(Map.Entry<Character, TrieNode> entry:tmp.child.entrySet()){
+				queue.add(entry.getValue()) ;
+				sq.add(nowString + entry.getKey()) ;
+			}
+		}
+		System.out.println(cnt);
+	}
+	
 	private void AddStrB(TrieNode node, String preString, ArrayList<String> res,int maxnum) {
 		if(node.wordnum > 0) res.add(preString) ;
 		if(res.size() > maxnum) return ;
@@ -150,9 +178,10 @@ public class Trie {
 		String path = "forIndex/titles/alltitles.txt" ;
 		//String path = "../Test/alltitles.txt" ;
 		Trie test = new Trie(path) ;
-		int maxnum = 5 ;
+		int maxnum = 9 ;
 		System.out.println("test null");
-		ArrayList<String> res = test.Search("", maxnum) ;
+		//long startime = System.currentTimeMillis() ;
+		ArrayList<String> res = test.Search("刘奕群", maxnum) ;
 		for(int i = 0 ; i < maxnum && i < res.size() ; i ++){
 			System.out.println(res.get(i));
 		}
@@ -161,5 +190,7 @@ public class Trie {
 		for(int i = 0 ; i < maxnum && i < res.size() ; i ++){
 			System.out.println(res.get(i));
 		}
+		//long endtime = System.currentTimeMillis() ;
+		//System.out.println("exe time is " + (endtime-startime));
 	}
 }
