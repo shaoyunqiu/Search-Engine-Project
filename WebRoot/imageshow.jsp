@@ -226,6 +226,7 @@ $().ready(function() {
 	        	$(this).bind('click',function(){ 
 		            input.val($(this).html());  
 		            suggestWrap.hide();  
+		            $(".form").submit();
 		        });  
 	        });
 	    }  
@@ -455,7 +456,7 @@ function DisplayNewDoc(obj) {
 			<form class="form" name="form1" method="get" action="ImageServer" style="width:70%">
 				<div>
 				<label style="width:80%;vertical-align:middle">
-				<input class="form-control input_search_key" id="gover_search_key" name="query" value="<%=currentQuery%>" type="text" style="width:100%; height:40px;"/>
+				<input autocomplete="off" class="form-control input_search_key" id="gover_search_key" name="query" value="<%=currentQuery%>" type="text" style="width:100%; height:40px;"/>
 				</label>
 				<label style="width:15%;vertical-align:middle">
 				<button type="submit" class="btn btn-info" style="width:100%;font-size:15px">搜索</button>
@@ -690,7 +691,7 @@ function DisplayNewDoc(obj) {
 			 		   		}%>
 			 		<div class="col-xs-4" >
 					 	<a class="fake-link" style="font-size:16px;color:#0000B0;"
-					 	 href="ImageServer?query=<%=sim%>">
+					 	 href="ImageServer?query=<%=simQuery.get(i * 3 + j)%>">
 					 		<%=sim%>
 					 	</a>
 					</div>

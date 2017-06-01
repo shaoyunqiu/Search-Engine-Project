@@ -1,8 +1,13 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Map;
 
 import javax.persistence.Id;
 
@@ -58,12 +63,48 @@ public class MyJsonDealer {
 		url = obj.getString("url") ;
 	}
 	
-	/*public static void main(String[] argv) {
-		JsonDealer jsonDealer = new JsonDealer("../data/html/1.json") ;
-		jsonDealer.ReadFile();
-		jsonDealer.getContent();
-		System.out.println("id is :" + jsonDealer.id);
-		System.out.println("title is :" + jsonDealer.title);
-		System.out.println("url is : " + jsonDealer.url);
-	}*/
+	public static void main(String[] argv) {
+		ArrayList<String> alltitles = new ArrayList<String>() ;
+		for(int i = 0 ; i < 52305 ; i ++){
+			String filename = "../data/html/" + Integer.toString(i) + ".json" ;
+			MyJsonDealer myJsonDealer= new MyJsonDealer(filename) ;
+			if(myJsonDealer.ReadFile()){
+				myJsonDealer.getContent();
+				alltitles.add(myJsonDealer.title) ;
+			}
+			else {
+				System.out.println("can not open " + filename);
+				continue ;
+			}
+			if(i % 10000 == 0) System.out.println("html 10000");
+		}
+		for(int i = 0 ; i < 19 ; i ++){
+			String filename = "../data/pdf/" + Integer.toString(i) + ".json" ;
+			MyJsonDealer myJsonDealer = new MyJsonDealer(filename) ;
+			if(myJsonDealer.ReadFile()){
+				myJsonDealer.getContent();
+				alltitles.add(myJsonDealer.title) ;
+			}
+			else {
+				System.out.println("can't open " + filename);
+				continue ;
+			}
+		}
+		String outpath = "forIndex/titles/alltitles.txt" ;
+		try {
+			File file = new File(outpath) ;
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "Unicode") ;
+			for(int i = 0 ; i < alltitles.size() ; i ++){
+				String t = alltitles.get(i) ;
+				t = t.trim() ;
+				t = t + "\n" ;
+				out.write(t);
+			}
+			out.close();
+			System.out.println("write title finish");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("write title failed");
+		}
+	}
 }
