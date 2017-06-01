@@ -15,6 +15,7 @@ System.out.println(basePath);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>TsingNews Search</title>
+<link rel="shortcut icon" href="<%=path %>/static/active.png" type="image/x-icon" />
 <!-- stylesheets -->
 <link href="<%=path %>/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=path %>/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">

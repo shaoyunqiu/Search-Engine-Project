@@ -13,6 +13,7 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>TsingNews Search</title>
 <!-- stylesheets -->
+<link rel="shortcut icon" href="<%=path %>/static/active.png" type="image/x-icon" />
 <link href="<%=path %>/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=path %>/static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link href="<%=path %>/static/base/css/fonts.min.css" rel="stylesheet">
@@ -63,6 +64,34 @@ String imagePath = request.getScheme()+"://"+request.getServerName()+":"+request
 	.search_suggest li{height:24px; overflow:hidden; padding-left:10px; line-height:24px; background:#FFFFFF; cursor:default;}  
 	.search_suggest li:hover{background:#DDDDDD;}  
 	.search_suggest li.hover{background:#DDDDDD;} 
+	
+	.page li {
+		float:left; list-style:none;
+		margin-left:6px;
+		margin-right:6px;
+	}
+	.page a {
+		border:1px solid #ccc;
+		font-size:17px;
+		padding-left:12px;
+		padding-right:12px;
+		padding-top:7px;
+		padding-bottom:7px;
+	}
+	.page a.active {
+		border:0px solid #ccc;
+	}
+	.page span {
+		color:#0000B0;
+	}
+	.page img {
+		width:25px; height:25px;
+		margin-top:-50px;
+		margin-left:7px;
+	}
+	.page li:nth-child(odd) img {
+		margin-top:-70px;
+	}
 </style>
  
 <script>
@@ -254,7 +283,7 @@ function createXMLHttpRequest() {
 function sendRequest(obj) {  
     createXMLHttpRequest();  
     var queryString = $("#queryString").html();
-    var page = $("li.active a").html();
+    var page = $("li a.active span").html();
     var requrl = "ImageServer?operation=replace&query=" + queryString + "&page=" + page + "&replaceNo=" + replaceNo; 
     XMLHttpReq.open("GET", requrl, true);  
     XMLHttpReq.onreadystatechange = function(){processResponse(obj);};//指定响应函数  
@@ -667,23 +696,29 @@ function DisplayNewDoc(obj) {
 				<% }; %>	  
 			 </div>
 		</div>
-		<br>
+		<br></br>
 		<%if(hits > 10) { 
 		   int maxPage = hits / 10 + (hits % 10 == 0 ? 0 : 1);%>
-		 <div class="pull-left" width="56%">
-		 	<ul class="pagination pull-right">
+		 <div class="pull-left page" width="56%">
+		 	<ul>
+		 		<li></li>
+		 	</ul>
+		 </div>
+		 <br>
+		 <div class="pull-left page" width="56%">
+		 	<ul>
 				<%if(currentPage>1){ %>
-					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage-1%>">&laquo;</a></li>
+					<li style="margin-top:21px;"><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage-1%>"><span>&lt;&nbsp;上一页</span></a></li>
 				<%}; %>
-				<%for (int i=Math.max(1,currentPage-5);i<currentPage;i++){%>
-					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a></li>
+				<%for (int i=Math.max(1,currentPage-10);i<currentPage;i++){%>
+					<li><img src="<%=path %>/static/inactive.png"><br><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><span><%=i%></span></a></li>
 				<%}; %>
-				<li class="active"><a href="#"><%=currentPage%></a></li>
+				<li><img src="<%=path %>/static/active.png"><br><a class="active" href="#"><span><%=currentPage%></span></a></li>
 				<%for (int i=currentPage+1;i<=maxPage;i++){ %>
-					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><%=i%></a></li>
+					<li><img src="<%=path %>/static/inactive.png"><br><a href="ImageServer?query=<%=currentQuery%>&page=<%=i%>"><span><%=i%></span></a></li>
 				<%}; %>
 				<%if(currentPage < maxPage){ %>
-					<li><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage+1%>">&raquo;</a></li>
+					<li style="margin-top:21px;"><a href="ImageServer?query=<%=currentQuery%>&page=<%=currentPage+1%>"><span>下一页&nbsp;&gt;</span></a></li>
 				<%}; %>
 			</ul>
 		  </div>

@@ -19,15 +19,18 @@ import java.io.*;
 
 public class ImageServer extends HttpServlet{
 	public static final int PAGE_RESULT=10;
+	public static final int MAX_SIM_NUM=9;
 	public static final String indexDir="forIndex";
 	public static final String picDir="";
 	private ImageSearcher search=null;
 	private VerticalIndexs viIndex=null;
+	private Trie simSearcher=null;
 	public ImageServer(){
 		super();
 		search=new ImageSearcher(new String(indexDir+"/index"));
 		search.loadGlobals(new String(indexDir+"/global.txt"));
 		viIndex = new VerticalIndexs(indexDir+"/verticalIndex");
+		simSearcher = new Trie(indexDir+"/titles/alltitles.txt");
 	}
 	
 	public ScoreDoc[] showList(ScoreDoc[] results,int page){
@@ -88,15 +91,15 @@ public class ImageServer extends HttpServlet{
 		// request similar query 
 		else if (operationString != null && operationString.indexOf("simQuery") > -1) {
 			System.out.println("SimQuery " + queryString);
-			ArrayList<String> simQuery = new ArrayList<String>();
+			ArrayList<String> simQuery = simSearcher.Search(queryString, MAX_SIM_NUM);
 			// TODO: add similar query to this list
-			simQuery.add(queryString);
-			simQuery.add(queryString + "返回数据1");  
-			simQuery.add(queryString + "返回数据2");  
-			simQuery.add(queryString + "不是有的人天生吃素的");  
-			simQuery.add(queryString + "不是有的人天生吃素的");  
-			simQuery.add(queryString + "2012是真的");  
-			simQuery.add(queryString + "2012是假的"); 
+			// simQuery.add(queryString);
+			// simQuery.add(queryString + "返回数据1");  
+			// simQuery.add(queryString + "返回数据2");  
+			// simQuery.add(queryString + "不是有的人天生吃素的");  
+			// simQuery.add(queryString + "不是有的人天生吃素的");  
+			// simQuery.add(queryString + "2012是真的");  
+			// simQuery.add(queryString + "2012是假的"); 
 			
 			response.setContentType("text/xml; charset=UTF-8");  
 		    response.setHeader("Cache-Control","no-cache");  
@@ -130,15 +133,15 @@ public class ImageServer extends HttpServlet{
 				String[][] extendUrls=null;
 				String[][] extendContents=null;
 				boolean[] hasExtend=null;
-				ArrayList<String> simQuery = new ArrayList<String>();
+				ArrayList<String> simQuery = simSearcher.Search(queryString, MAX_SIM_NUM);
 				// TODO: add similar query to this list
-				simQuery.add(queryString);
-				simQuery.add(queryString + "返回数据1");  
-				simQuery.add(queryString + "返回数据2");  
-				simQuery.add(queryString + "不是有的人天生吃素的");  
-				simQuery.add(queryString + "不是有的人天生吃素的");  
-				simQuery.add(queryString + "2012是真的");  
-				simQuery.add(queryString + "2012是假的"); 
+				// simQuery.add(queryString);
+				// simQuery.add(queryString + "返回数据1");  
+				// simQuery.add(queryString + "返回数据2");  
+				// simQuery.add(queryString + "不是有的人天生吃素的");  
+				// simQuery.add(queryString + "不是有的人天生吃素的");  
+				// simQuery.add(queryString + "2012是真的");  
+				// simQuery.add(queryString + "2012是假的"); 
 				TopDocs results=search.searchQuery(queryString, "title", similarityChoice ,100);
 				ArrayList<String> queryWords = search.splitQuery(queryString);
 				if (results != null) {
