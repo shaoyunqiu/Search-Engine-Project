@@ -333,11 +333,13 @@ function splitText(queryWords, text, queryWordsNum) {
 }
 
 function DisplayNewDoc(obj) { 
+	
 	var curRow = $(obj).prev();
 	var rowParent = $(obj).parent();
 	var curHeight = curRow.css("height");
-    var title = XMLHttpReq.responseXML.getElementsByTagName("title")[0].firstChild.nodeValue;  
-    var url = XMLHttpReq.responseXML.getElementsByTagName("url")[0].firstChild.nodeValue;  
+	
+    var title = XMLHttpReq.responseXML.getElementsByTagName("title")[0].firstChild.nodeValue; 
+    var url = XMLHttpReq.responseXML.getElementsByTagName("url")[0].firstChild.nodeValue;
     var content = XMLHttpReq.responseXML.getElementsByTagName("content")[0].firstChild.nodeValue;
     var queryWordsNum = XMLHttpReq.responseXML.getElementsByTagName("queryWords").length;
     var queryWords = new Array(queryWordsNum);
@@ -351,6 +353,7 @@ function DisplayNewDoc(obj) {
     	content = content.substring(0, 120);
     	content += "...";
     }
+   
     var splitContent = splitText(queryWords, content, queryWordsNum);
     var urlDisplay = url;
     if (url.length > 80) {

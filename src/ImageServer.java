@@ -83,7 +83,8 @@ public class ImageServer extends HttpServlet{
 				    out.println("<title>" + title + "</title>");  
 				    out.println("<url>" + url + "</url>");  
 				    out.println("<content>" + content + "</content>"); 
-				    out.println("</response>");  
+				    out.println("</response>");
+				    out.flush();
 				    out.close(); 
 				}
 			}

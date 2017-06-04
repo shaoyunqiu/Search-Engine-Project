@@ -112,7 +112,7 @@ public class ImageSearcher {
 			
 	        
 			//Query query=new SimpleQuery(term,avgLength);
-			/*String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext","url"};
+			String[] fields = { "title", "keywords", "h1", "h2", "h3", "h4", "h5", "h6", "content", "hreftext","url"};
 			Map<String, Float> boosts = new HashMap<String, Float>() ;
 			boosts.put("title",10.0f) ;
 			boosts.put("keywords", 1.0f/2) ;
@@ -124,11 +124,11 @@ public class ImageSearcher {
 			boosts.put("h6", 1.0f/8) ;
 			boosts.put("hreftext", 1.0f/8) ;
 			boosts.put("content", 5.0f) ;
-			boosts.put("url", 10.0f) ;*/
-			String[] fields = {"title", "content"} ;
-			Map<String, Float> boosts= new HashMap<String, Float>() ;
-			boosts.put("title", 10.0f) ;
-			boosts.put("content", 1.0f) ;
+			boosts.put("url", 10.0f) ;
+//			String[] fields = {"title", "content"} ;
+//			Map<String, Float> boosts= new HashMap<String, Float>() ;
+//			boosts.put("title", 10.0f) ;
+//			boosts.put("content", 1.0f) ;
 			
 			/*boosts.put("title",10.0f) ;
 			boosts.put("keywords", 1.0f) ;
