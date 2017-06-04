@@ -132,9 +132,6 @@ public class ImageIndexer {
 				title = jsonDealer.title ;
 				id = jsonDealer.id ;
 				url = UrlNorm.urlNormalize(jsonDealer.url) ;
-				if(url == "http://news.tsinghua.edu.cn/publish/thunews/index.html") {
-					System.out.println(id);
-				}
 			}
 			else {
 				System.out.println("file is not exist, continue " + filename);
@@ -170,13 +167,14 @@ public class ImageIndexer {
 				}	
 				pr = PRMap.get(new Integer(id)) ;
 			}
-      if(map.get(title) == null) {
-    		map.put(title, true);
-       }
-      else return ;
+		    if(map.get(title) == null) {
+		    	map.put(title, true);
+		    }
+		    else return ;
     		Document document  =   new  Document();
     		
-    		float pr2square = (float) Math.sqrt(pr) ; 
+    		//float pr2square = (float) Math.sqrt(pr) ; 
+    		float pr2square = pr.floatValue() ;
     		document.setBoost(pr2square); // use pagerank as boost for this doc
     		
 			Field titleField  =   new  Field( "title" ,title,Field.Store.YES, Field.Index.ANALYZED);

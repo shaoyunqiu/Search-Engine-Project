@@ -100,7 +100,7 @@ public class Trie {
 		return curr ;
 	}
 	
-	private void AddStr(TrieNode node, String preString, ArrayList<String> res, int maxnum, Boolean flag) {
+	/*private void AddStr(TrieNode node, String preString, ArrayList<String> res, int maxnum, Boolean flag) {
 		if(flag.booleanValue() == false) return ;
 		if(res.size() >= maxnum){
 			flag = false ;
@@ -127,7 +127,7 @@ public class Trie {
 				}
 			}
 		}
-	}
+	}*/
 	
 	private void AddBFS(TrieNode node, String preString, ArrayList<String> res, int maxnum) {
 		Queue<TrieNode> queue = new LinkedList<TrieNode>() ;
@@ -155,7 +155,7 @@ public class Trie {
 		System.out.println(cnt);
 	}
 	
-	private void AddStrB(TrieNode node, String preString, ArrayList<String> res,int maxnum) {
+	/*private void AddStrB(TrieNode node, String preString, ArrayList<String> res,int maxnum) {
 		if(node.wordnum > 0) res.add(preString) ;
 		if(res.size() > maxnum) return ;
 		if(node.child.size() == 0) return ;
@@ -172,7 +172,7 @@ public class Trie {
 				if(res.size() >= maxnum) return ;
 			}
 		} // maxdepth 2 layer
-	}
+	}*/
 	
 	/*public static void main(String[] argv) {
 		String path = "forIndex/titles/alltitles.txt" ;
